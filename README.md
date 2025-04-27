@@ -2,15 +2,15 @@
 
 Créer un site web de Pong en temps réel avec Docker, sécurité et gameplay basique.
 
-## Table des matiere
+## Table des matières
 
 - [ft\_transcendence](#ft_transcendence)
-	- [Table des matiere](#table-des-matiere)
+	- [Table des matières](#table-des-matières)
 	- [Branchement](#branchement)
 	- [Arborescence du projet](#arborescence-du-projet)
 	- [Technologies utilisées](#technologies-utilisées)
 	- [Utilisation (Comment tester)](#utilisation-comment-tester)
-	- [Membre](#membre)
+	- [Membres](#membres)
 
 ## Branchement
 
@@ -48,7 +48,7 @@ Nous disposons également des répertoires suivants :
 
 Le projet est en cours de **réalisation**, mais en allant ici, vous **verrez** comment tester : [chemin ou il y a les instructions]()
 
-## Membre
+## Membres 
 
 - [Coltcivers](https://github.com/Coltcivers)
 - [Transc42](https://github.com/Transc42)
