@@ -110,9 +110,10 @@
     // "skipDefaultLibCheck": true,                      /* Skip type checking .d.ts files that are included with TypeScript. */
     "skipLibCheck": true                                 /* Skip type checking all .d.ts files. */
   },
-  "include": ["src/public/**/*"],
+  "include": ["src/public/game.ts"],
   "exclude": [
     "./node_modules",
-    "./dist"
+    "./public",
+    "./src/public/**/*.test.ts",
   ],
 }
