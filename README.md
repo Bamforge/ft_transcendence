@@ -9,7 +9,8 @@ Créer un site web de Pong en temps réel avec Docker, sécurité et gameplay ba
 	- [Branchement](#branchement)
 	- [Arborescence du projet](#arborescence-du-projet)
 	- [Technologies utilisées](#technologies-utilisées)
-	- [Utilisation (Comment tester)](#utilisation-comment-tester)
+	- [Utilisation](#utilisation)
+	- [A faire :](#a-faire-)
 	- [Membres](#membres)
 
 ## Branchement
@@ -27,6 +28,7 @@ Voici l'arborescence actuelle des fichiers et dossiers :
 ├── Game/
 ├── LICENSE
 ├── README.md
+├── Makefile
 └── documentation/
 ```
 
@@ -34,6 +36,7 @@ Voici l'arborescence actuelle des fichiers et dossiers :
 
 - ``LICENSE`` : Ce fichier définit les conditions légales d'utilisation de notre projet selon [la BSD 3-Clause License](https://fr.wikipedia.org/wiki/Licence_BSD).
 - ``README.md`` : C'est le fichier que vous êtes en train de lire actuellement. Il sert de vitrine pour présenter notre **projet**.
+- ``Makefile`` : Qui permettra automatiquement de tester ce qu'on fait.
 
 Nous disposons également des répertoires suivants :
 
@@ -42,11 +45,18 @@ Nous disposons également des répertoires suivants :
 
 ## Technologies utilisées
 
-> A completer
+Vous pouvez consulter : [Techno](./documentation/techno.md) qui énumère toutes les technologies utilisées avec un résumé simplifié et une description.
 
-## Utilisation (Comment tester)
+## Utilisation 
 
-Le projet est en cours de **réalisation**, mais en allant ici, vous **verrez** comment tester : [chemin ou il y a les instructions]()
+Faites `make` et suivez les instructions du Makefile à la racine du répertoire.
+
+## A faire :
+
+Yassine : Rediger [ce fichier](./documentation/etape/2_Amelioration_de_la_structure.md)
+
+
+N'importe de qui :Metre en place docker.
 
 ## Membres 
 
