@@ -18,10 +18,9 @@
 			- [`tsconfig.server.json`](#tsconfigserverjson)
 	- [Comment tester l'arborescence](#comment-tester-larborescence)
 
-
 ## Objectif de ce fichier
 
-Décrire la structure du dossier Game/ et fournir des explications détaillées sur chaque partie pour faciliter la compréhension du projet Pong. Ce fichier vise également à résoudre la problématique suivante :
+Décrire la structure du dossier ./Projet/Game/ et fournir des explications détaillées sur chaque partie pour faciliter la compréhension du projet Pong. Ce fichier vise également à résoudre la problématique suivante :
 "Mettre en place une structure minimale permettant de créer un site pour tester le jeu Pong avec son design et la base de données, sans implémenter de backend ni de sécurité."
 
 > Si des technologies ne sont pas maitrisé vous pouvez consultez ce fichier md [Techno](./../techno.md)

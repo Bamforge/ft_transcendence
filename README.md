@@ -25,7 +25,7 @@ Voici l'arborescence actuelle des fichiers et dossiers :
 
 ```
 .
-├── Game/
+├── Projet/
 ├── LICENSE
 ├── README.md
 ├── Makefile
@@ -40,7 +40,7 @@ Voici l'arborescence actuelle des fichiers et dossiers :
 
 Nous disposons également des répertoires suivants :
 
-- ``Game/`` : Il s'agit actuellement du répertoire où nous **réalisons** le projet.
+- ``Projet/`` : Il s'agit actuellement du répertoire où nous **réalisons** le projet.
 - ``documentation/`` : Un dossier contenant plusieurs fichiers Markdown qui ont pour but de nous aider dans notre documentation, **recherche**, et organisation.
 
 ## Technologies utilisées

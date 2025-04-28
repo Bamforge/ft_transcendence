@@ -6,14 +6,13 @@
 #    By: yzaoui <yzaoui@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/27 05:34:16 by yzaoui            #+#    #+#              #
-#    Updated: 2025/04/27 06:17:20 by yzaoui           ###   ########.fr        #
+#    Updated: 2025/04/28 04:12:50 by yzaoui           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 # Commandes par défaut
-.PHONY: all help run
+.PHONY: all help build up clean check re
 
-# Variables
 # Couleurs
 GREEN = \033[1;32m
 BLUE = \033[1;34m
@@ -21,26 +20,23 @@ YELLOW = \033[1;33m
 RED = \033[1;31m
 NC = \033[0m  # Sans couleur
 
+# Variables
+
 PORT = 3000
 PROJECT_NAME = transandance
-GAME_DIR = ./Game
+GAME_DIR = ./Projet/Game
+DOCKER_COMPOSE := docker-compose
+COMPOSE_FILE := ./Projet/docker-compose.yml
+DC := $(DOCKER_COMPOSE) -f $(COMPOSE_FILE)
 
 # Commande principale : affiche l'aide
 all: help
 
-$(PROJECT_NAME): install build start
+$(PROJECT_NAME): build up
+	@echo "$(GREEN)✔ Application construite et démarrée avec succès !$(NC)"
 
 test : $(PROJECT_NAME)
 
-# Aide
-help:
-	@echo "$(YELLOW)📝 Utilisation :$(NC)"
-	@echo "\t$(GREEN)make$(NC) \t\t   : Affiche les commande disponible de make."
-	@echo "\t$(GREEN)make install$(NC) \t   : Installe les dépendances du projet."
-	@echo "\t$(GREEN)make build$(NC) \t   : Compile le projet."
-	@echo "\t$(GREEN)make start$(NC) \t   : Démarre le serveur."
-	@echo "\t$(GREEN)make stop$(NC) \t   : Arrête le serveur et nettoie."
-	@echo "\t$(GREEN)make test$(NC) \t   : $(BLUE)Fait sa pour testé$(NC)"
 
 # Commande pour installer les dépendances
 install:
@@ -49,23 +45,43 @@ install:
 
 # Commande pour compiler le projet
 build:
-	@echo "$(YELLOW)🔨 Compilation du projet...$(NC)"
-	npm run build --prefix $(GAME_DIR)
+	@echo "$(BLUE)🔧 Construction des images Docker...$(NC)"
+	@$(DC) build
+	@echo "$(GREEN)✔ Images Docker construites avec succès !$(NC)"
 
-# Commande pour démarrer le serveur
-start:
-	@echo "$(YELLOW)🚀 Démarrage du serveur...$(NC)"
-	npm run start --prefix $(GAME_DIR)
+# Démarrer les conteneurs
+up:
+	@echo "$(BLUE)🚀 Démarrage des conteneurs Docker...$(NC)"
+	@$(DC) up -d
+	@echo "$(GREEN)✔ Conteneurs Docker démarrés avec succès !$(NC)"
 
-# Commande pour arrêter le serveur et nettoyer
+
+# Nettoyer les conteneurs, volumes et réseaux
 stop:
-	@echo "$(YELLOW)⏹️ Arrêt du serveur et nettoyage...$(NC)"
-	@PID=$$(lsof -t -i:$(PORT)); \
-	if [ -n "$$PID" ]; then \
-		kill $$PID; \
-		echo "$(GREEN)Serveur arrêté$(NC)"; \
-	else \
-		echo "$(RED)Aucun serveur en cours$(NC)"; \
-	fi
+	@echo "$(RED)🛑 Stop les conteneurs ...$(NC)"
+	@$(DC) down
+	@echo "$(GREEN)✔ Arret terminé !$(NC)"
 
 fclean : stop
+
+# Nettoyer les conteneurs, volumes et réseaux
+clean:
+	@echo "$(RED)🧹 Nettoyage des conteneurs et volumes Docker...$(NC)"
+	@$(DC) down -v --remove-orphans --rmi all
+	@sudo rm -rf $(MARIADB_DIR) $(WORDPRESS_DIR)
+	@echo "$(GREEN)✔ Nettoyage terminé !$(NC)"
+
+re: clean build up
+
+# Aide
+help:
+	@echo "Faire \"docker exec -it projet-game-1 sh\" pour rentré dans le docker"
+	@echo "$(YELLOW)📝 Utilisation :$(NC)"
+	@echo "  $(GREEN)make$(NC)              : Fais help"
+	@echo "  $(GREEN)make build$(NC)        : Construire uniquement les images Docker"
+	@echo "  $(GREEN)make up$(NC)           : Démarrer uniquement les conteneurs Docker"
+	@echo "  $(GREEN)make stop$(NC)         : Arret uniquement les conteneurs Docker"
+	@echo "  $(GREEN)make clean$(NC)        : Nettoyer les conteneurs et volumes Docker"
+	@echo "  $(GREEN)make re$(NC)           : Nettoyer et reconstruire les images Docker et les redémarre"
+	@echo "  $(GREEN)make help$(NC)         : Afficher cette aide"
+	@echo "  $(GREEN)make test$(NC)         : $(BLUE)Fait sa pour testé$(NC)"
