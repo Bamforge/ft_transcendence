@@ -6,9 +6,11 @@
   "scripts": {
     "build:server": "tsc -p tsconfig.server.json",
     "build:client": "tsc -p tsconfig.client.json",
-    "build": "npm run build:server && npm run build:client",
+    "build:css": "npx @tailwindcss/cli -i ./tailwindcss/input.css -o ./css/output.css",
+    "build": "npm run build:css && npm run build:server && npm run build:client",
     "start": "tsc -w & nodemon dist/server.js",
-    "dev": "ts-node index.ts"
+    "dev": "ts-node index.ts",
+    "clear": "rm -rf ./dist ./css"
   },
   "keywords": [],
   "author": "",
@@ -20,8 +22,11 @@
     "sqlite3": "^5.1.7"
   },
   "devDependencies": {
+    "@tailwindcss/cli": "^4.0.0",
     "@types/node": "^22.15.2",
     "nodemon": "^3.1.10",
+    "tailwindcss": "^4.0.0",
+    "ts-node": "^10.9.2",
     "typescript": "^5.8.3"
   }
 }
