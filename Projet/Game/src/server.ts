@@ -17,6 +17,7 @@ app.register(fastifyStatic, {
   prefix: '/',
 });
 
+/* Obsolete si c'est dans public
 // Route générique pour CSS
 app.get('/css/:file', async (req: FastifyRequest<{ Params: { file: string } }>, reply) => {
 	console.log(`Essaye de recuperer un fchier dans ./css.`);
@@ -59,7 +60,7 @@ app.get('/dist/:file', async (req: FastifyRequest<{ Params: { file: string } }>,
 		reply.status(500).send('Erreur serveur lors de la lecture du fichier JavaScript');
 	}
 });
-
+*/
   /**
  *
  *   DATATABASE TEST
