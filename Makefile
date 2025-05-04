@@ -6,7 +6,7 @@
 #    By: bmetehri <bmetehri@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/27 05:34:16 by yzaoui            #+#    #+#              #
-#    Updated: 2025/05/01 15:55:43 by bmetehri         ###   ########.fr        #
+#    Updated: 2025/05/04 04:29:08 by bmetehri         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -60,7 +60,7 @@ clean:
 # Force clean: remove node_modules and package-lock.json
 fclean: clean
 	@echo -e "$(YELLOW)🧹 Force cleaning project...$(NC)"
-	@rm -rf "$(NODE_MODULE_PATH)" "$(GAME_DIR)/package-lock.json"
+	@rm -rf "$(NODE_MODULE_PATH)"
 	@echo -e "$(RED)🗑️ Project cleaned (node_modules and lock file removed)!$(NC)"
 
 # Execute the built code locally
@@ -121,10 +121,14 @@ go_in_container:
 ### Combined Actions
 
 # Rebuild and restart Docker containers
-re: clean_dock build_img up_cont
+re_docker: clean_dock build_img up_cont
 	@echo -e "$(BLUE)🔄 Rebuilding and restarting Docker environment...$(NC)"
 	@echo -e "$(GREEN)✔ Docker environment rebuilt and restarted!$(NC)"
 
+### Run local tests
+re: fclean local
+	@echo -e "$(BLUE)🔄 Rebuilding and restarting local environment...$(NC)"
+	@echo -e "$(GREEN)✔ Local environment rebuilt and restarted!$(NC)"
 
 # Help message
 help:
@@ -150,7 +154,8 @@ help:
 	@echo -e " $(GREEN)make go_in_container$(NC): Enters the running Docker container."
 	@echo -e " "
 	@echo -e "$(YELLOW)🔄 Combined Actions:$(NC)"
-	@echo -e " $(GREEN)make re$(NC)        : Rebuilds and restarts the Docker environment."
+	@echo -e " $(GREEN)make re_docker$(NC)  : Rebuilds and restarts the Docker environment."
+	@echo -e " $(GREEN)make re$(NC)        : Rebuilds and restarts the local environment."
 	@echo -e " "
 	@echo -e "$(YELLOW)ℹ️ Additional Notes:$(NC)"
 	@echo -e " - Ensure Docker is installed and running if you intend to use Docker targets."
