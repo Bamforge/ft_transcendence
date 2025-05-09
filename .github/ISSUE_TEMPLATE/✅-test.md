@@ -2,7 +2,7 @@
 name: "✅ Test"
 about: Define tests to verify functionality
 title: "[TEST] "
-labels: test
+labels: chore, priority-low, test
 assignees: ''
 
 ---
