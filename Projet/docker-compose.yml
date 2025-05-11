@@ -2,10 +2,11 @@ version: '3.8'
 
 services:
   game:
-    image: game_project
+    image: game_project_img
     build:
       context: .
       dockerfile: docker/Node_js/Dockerfile
+      
     ports:
       - "3000:3000"
     command:  sh -c "npm run build && npm start"
@@ -15,5 +16,6 @@ services:
       retries: 3
       start_period: 10s
       timeout: 10s
+    container_name: game_project_cont
 
 

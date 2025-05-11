@@ -1,18 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Fastify Canvas</title>
-  <style>
-    body {background: white; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
-    canvas { border: 1px solid #333; }
-  </style>
-</head>
-<body>
-  <canvas id="myCanvas" width="1000" height="1000"></canvas>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Fastify Canvas</title>
+    <link rel="stylesheet" href="./tail_to_css/output.css" />
+  </head>
+  <body class="bg-white flex justify-center items-center h-screen m-0">
+    <canvas id="myCanvas" width="1000" height="1000" class="border border-gray-800"></canvas>
 
-  <!-- Load the compiled client script -->
-  <script type="module" src="/game.js"></script>
-</body>
+    <!-- Load the compiled client script -->
+    <script type="module" src="./ts_to_js/game.js"></script>
+  </body>
 </html>
