@@ -10,6 +10,9 @@
     "build": "npm run build:css && npm run build:server && npm run build:client",
     "start": "tsc -w & nodemon dist/server.js",
     "dev": "ts-node index.ts",
+    "lint": "eslint . --ext .js,.ts,.mjs,.cjs",
+    "fmt": "prettier --write .",
+    "docs": "jsdoc -c jsdoc.json",
     "clean": "rm -rf ./dist ./public/ts_to_js ./public/tail_to_css "
   },
   "keywords": [],
@@ -22,11 +25,22 @@
     "sqlite3": "^5.1.7"
   },
   "devDependencies": {
+    "@babel/core": "^7.27.1",
+    "@babel/preset-typescript": "^7.27.1",
+    "@eslint/js": "^9.26.0",
     "@tailwindcss/cli": "^4.0.0",
     "@types/node": "^22.15.2",
+    "eslint": "^9.26.0",
+    "eslint-config-prettier": "^10.1.5",
+    "eslint-plugin-prettier": "^5.4.0",
+    "globals": "^16.1.0",
+    "jsdoc": "^4.0.4",
+    "jsdoc-babel": "^0.5.0",
     "nodemon": "^3.1.10",
+    "prettier": "^3.5.3",
     "tailwindcss": "^4.0.0",
     "ts-node": "^10.9.2",
-    "typescript": "^5.8.3"
+    "typescript": "^5.8.3",
+    "typescript-eslint": "^8.32.0"
   }
 }
