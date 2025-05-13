@@ -1,3 +1,3 @@
 Faire un docker pour le front et pour le back et faire communiquer les deux.
 
-Et stocker le volume a la racine dans le dossier goinfre ou sgoinfre.
+Et stocker le volume a la racine dans le dossier goinfre ou sgoinfre.
