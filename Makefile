@@ -3,15 +3,17 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: bmetehri <bmetehri@student.42.fr>          +#+  +:+       +#+         #
+#    By: yzaoui <yzaoui@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/27 05:34:16 by yzaoui            #+#    #+#              #
-#    Updated: 2025/05/04 04:29:08 by bmetehri         ###   ########.fr        #
+#    Updated: 2025/05/12 02:33:41 by yzaoui           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 # Default targets
-.PHONY: all help local install build_local clean fclean exec test_local docker build_img up_cont stop_dock clean_dock test_dock show_img show_container go_in_container re test
+.PHONY:	all help local install build_local clean fclean exec test_local docker \
+		build_img up_cont stop_dock clean_dock test_dock show_img \
+		show_container go_in_container re test check_goinfre
 
 # Colors
 GREEN  = \033[1;32m
@@ -76,8 +78,16 @@ test_local: install build_local exec
 
 docker: build_img up_cont
 
+check_goinfre:
+	@if [ ! -d /sgoinfre/$(USER)/ft_trans/db ]; then \
+		echo "📁 Dossier /sgoinfre/$(USER)/ft_trans/db non trouvé. Création..."; \
+		sudo mkdir -p /sgoinfre/$(USER)/ft_trans/db; \
+	else \
+		echo "✅ Dossier /sgoinfre/$(USER)/ft_trans/db déjà présent."; \
+	fi
+
 # Build Docker image
-build_img:
+build_img: check_goinfre
 	@echo -e "$(YELLOW)🐳 Building Docker image...$(NC)"
 	@$(DC) build --no-cache
 	@echo -e "$(GREEN)✔ Docker image "$(IMG_NAME)" built successfully!$(NC)"
@@ -130,6 +140,10 @@ re: fclean local
 	@echo -e "$(BLUE)🔄 Rebuilding and restarting local environment...$(NC)"
 	@echo -e "$(GREEN)✔ Local environment rebuilt and restarted!$(NC)"
 
+# Commande pour afficher les logs du conteneur
+dock_logs:
+	docker logs -f $(CONTAINER_NAME)
+
 # Help message
 help:
 	@echo -e "$(BLUE)✨ Makefile Help for $(PROJECT_NAME) ✨$(NC)"
@@ -152,6 +166,7 @@ help:
 	@echo -e " $(GREEN)make show_img$(NC)  : Shows existing Docker images."
 	@echo -e " $(GREEN)make show_container$(NC): Shows running Docker containers."
 	@echo -e " $(GREEN)make go_in_container$(NC): Enters the running Docker container."
+	@echo -e " $(GREEN)make dock_logs$(NC): afficher les logs des conteneurs."
 	@echo -e " "
 	@echo -e "$(YELLOW)🔄 Combined Actions:$(NC)"
 	@echo -e " $(GREEN)make re_docker$(NC)  : Rebuilds and restarts the Docker environment."
