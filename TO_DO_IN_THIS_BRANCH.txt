@@ -1,1 +1,1 @@
-Sert de transition c'est dans cette branche qu'on ajoute chaque changement auxx fur et a mesure.
+Cree un chemin homme about et 404.
