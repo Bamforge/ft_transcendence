@@ -13,7 +13,8 @@
     "lint": "eslint . --ext .js,.ts,.mjs,.cjs",
     "fmt": "prettier --write .",
     "docs": "jsdoc -c jsdoc.json",
-    "clean": "rm -rf ./dist ./public/ts_to_js ./public/tail_to_css "
+    "clean": "rm -rf ./dist ./public/ts_to_js ./public/tail_to_css ",
+	"re": "npm run clean && npm run build && npm run start"
   },
   "keywords": [],
   "author": "",
