@@ -8,9 +8,7 @@ COPY ../../Game/public ./public
 COPY ../../Game/src ./src
 COPY ../../Game/tailwindcss ./tailwindcss
 
-COPY ../../Game/.babelrc ./.babelrc
-COPY ../../Game/.prettierrc ./.prettierrc
-COPY ../../Game/eslint.config.mjs ./eslint.config.mjs
+COPY ../../Game/config ./config
 
 RUN useradd -m appuser
 
