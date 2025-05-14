@@ -5,6 +5,7 @@ import { route_visit, route_visits } from './route_visits';
 import { route_racine } from './route_racine';
 import { route_about } from './route_about';
 import { route_404 } from './route_404';
+import { route_test_ejs } from './route_test_ejs';
 
 // Interface for user in request
 declare module 'fastify' {
@@ -23,5 +24,6 @@ export const routes = [
 	route_visits,
 	route_racine,
 	route_404,
-	route_about
+	route_about,
+	route_test_ejs
 ];

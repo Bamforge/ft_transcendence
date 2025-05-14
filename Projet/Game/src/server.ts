@@ -1,10 +1,12 @@
-import fastify, { FastifyInstance } from 'fastify';
+import fastify, { FastifyBaseLogger, FastifyInstance, FastifyTypeProvider, RawServerDefault } from 'fastify';
+import fastifyView from "@fastify/view";
 import fastifyStatic from '@fastify/static';
 import path, { resolve } from 'path';
 import sqlite3 from 'sqlite3';
 import { routes } from "./routes/routes";
 import GetDatabase, { InitDatabase } from './db_gestion/db_creation';
 import { readFileSync } from 'fs';
+import { IncomingMessage, ServerResponse } from 'http';
 
 /**
  * Instance principale de Fastify pour gérer le serveur HTTP.
@@ -13,6 +15,16 @@ const app: FastifyInstance = fastify({
 	logger: true,
 	caseSensitive: false,
 	ignoreTrailingSlash: true,
+});
+
+
+// Register plugins
+app.register(fastifyView, {
+	engine: {
+		ejs: require("ejs")
+	},
+	root: path.join(__dirname, '../public/ejs_files'),
+	viewExt: 'ejs', 
 });
 
 /**
@@ -74,3 +86,4 @@ app.setNotFoundHandler((req, reply) => {
 });
 
 start();
+
