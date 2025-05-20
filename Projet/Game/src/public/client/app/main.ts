@@ -31,41 +31,57 @@ async function loadView(view: string): Promise<void> {
 				});
 				oldScript.replaceWith(newScript);
 			});
-			// attachEventListeners();
+			attachEventListeners();
 			history.pushState({ view } as AppState, '', `/${view}`);
 		} else {
-			appDiv.innerHTML = '<p class="text-red-500 text-center">Error loading view</p>';
+			// Only set innerHTML if it's not already a 404 fallback
+			if (!appDiv.innerHTML.includes('404')) {
+				appDiv.innerHTML = '<p class="text-red-500 text-center">Error loading view</p>';
+			}
 		}
 	} catch (error) {
 		console.error('Error:', error);
 	}
 }
 
-// function attachEventListeners(): void {
-// 	const toSignin: HTMLElement | null = document.getElementById('to-signin');
-// 	const toSignup: HTMLElement | null = document.getElementById('to-signup');
-// 	const signupForm: HTMLFormElement | null = document.getElementById(
-// 		'signup-form'
-// 	) as HTMLFormElement | null;
-// 	const signinForm: HTMLFormElement | null = document.getElementById(
-// 		'signin-form'
-// 	) as HTMLFormElement | null;
-// 	const logoutButton: HTMLElement | null = document.getElementById('logout');
+function attachEventListeners(): void {
+	const toAbout: HTMLElement | null = document.getElementById('to-about');
+	const toStandings: HTMLElement | null = document.getElementById('to-standings');
+	const toTournaments: HTMLElement | null = document.getElementById('to-tournaments');
 
-// 	if (toSignin)
-// 		toSignin.addEventListener('click', (e: MouseEvent) => {
-// 			e.preventDefault();
-// 			loadView('signin');
-// 		});
-// 	if (toSignup)
-// 		toSignup.addEventListener('click', (e: MouseEvent) => {
-// 			e.preventDefault();
-// 			loadView('signup');
-// 		});
-// 	if (signupForm) signupForm.addEventListener('submit', handleSignup);
-// 	if (signinForm) signinForm.addEventListener('submit', handleSignin);
-// 	if (logoutButton) logoutButton.addEventListener('click', handleLogout);
-// }
+	// 	const toSignup: HTMLElement | null = document.getElementById('to-signup');
+	// 	const signupForm: HTMLFormElement | null = document.getElementById(
+	// 		'signup-form'
+	// 	) as HTMLFormElement | null;
+	// 	const signinForm: HTMLFormElement | null = document.getElementById(
+	// 		'signin-form'
+	// 	) as HTMLFormElement | null;
+	// 	const logoutButton: HTMLElement | null = document.getElementById('logout');
+
+	if (toAbout)
+		toAbout.addEventListener('click', (e: MouseEvent) => {
+			e.preventDefault();
+			loadView('about');
+		});
+	if (toStandings)
+		toStandings.addEventListener('click', (e: MouseEvent) => {
+			e.preventDefault();
+			loadView('standings');
+		});
+	if (toTournaments)
+		toTournaments.addEventListener('click', (e: MouseEvent) => {
+			e.preventDefault();
+			loadView('tournaments');
+		});
+	// 	if (toSignup)
+	// 		toSignup.addEventListener('click', (e: MouseEvent) => {
+	// 			e.preventDefault();
+	// 			loadView('signup');
+	// 		});
+	// 	if (signupForm) signupForm.addEventListener('submit', handleSignup);
+	// 	if (signinForm) signinForm.addEventListener('submit', handleSignin);
+	// 	if (logoutButton) logoutButton.addEventListener('click', handleLogout);
+}
 
 // async function handleSignup(event: Event): Promise<void> {
 // 	event.preventDefault();

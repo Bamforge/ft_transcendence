@@ -10,7 +10,7 @@ import { animate } from './renderer';
 // and this script (game.js) is being executed.
 initCanvas();
 
-	console.log('heeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeere');
+console.log('heeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeere');
 
 // Now you can safely define objects that depend on canvas dimensions
 export const paddleOne = new Paddle({

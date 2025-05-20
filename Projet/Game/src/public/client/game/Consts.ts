@@ -12,8 +12,6 @@ export type Velocity = {
 export let canvas: HTMLCanvasElement;
 export let c: CanvasRenderingContext2D;
 
-
-
 // Add an initializer function
 export function initCanvas(): void {
 	const canvasElement = document.getElementById('gameCanvas') as HTMLCanvasElement | null;
@@ -27,8 +25,6 @@ export function initCanvas(): void {
 		throw new Error('CRITICAL: Failed to get 2D rendering context for the canvas.');
 	}
 	c = context;
-
-
 
 	canvas.width = 1000;
 	canvas.height = 500;
