@@ -9,6 +9,8 @@ Créer un site web de Pong en temps réel avec Docker, sécurité et gameplay ba
 	- [Branchement](#branchement)
 	- [Arborescence du projet](#arborescence-du-projet)
 	- [Technologies utilisées](#technologies-utilisées)
+	- [Choix technologiques](#choix-technologiques)
+	- [Installation et démarrage](#installation-et-démarrage)
 	- [Utilisation](#utilisation)
 	- [A faire :](#a-faire-)
 	- [Membres](#membres)
@@ -47,7 +49,51 @@ Nous disposons également des répertoires suivants :
 
 Vous pouvez consulter : [Techno](./documentation/techno.md) qui énumère toutes les technologies utilisées avec un résumé simplifié et une description.
 
-## Utilisation 
+## Choix technologiques
+
+### Backend : Fastify vs PHP
+
+Nous avons choisi Fastify comme framework backend pour les raisons suivantes :
+- Performance supérieure : Fastify est l'un des frameworks Node.js les plus rapides
+- Support natif de WebSocket pour le jeu en temps réel
+- Architecture moderne et extensible
+- Meilleure intégration avec TypeScript
+- Écosystème riche pour la gestion des WebSockets et des événements en temps réel
+
+## Installation et démarrage
+
+### Prérequis
+- Docker et Docker Compose
+- Node.js (v18 ou supérieur)
+- npm ou yarn
+
+### Étapes d'installation
+
+1. Cloner le repository :
+```bash
+git clone https://github.com/votre-username/ft_transcendence.git
+cd ft_transcendence
+```
+
+2. Installer les dépendances du frontend :
+```bash
+cd Projet/Game/frontend
+npm install
+```
+
+3. Construire le frontend :
+```bash
+npm run build
+```
+
+4. Démarrer les services avec Docker :
+```bash
+docker-compose up --build
+```
+
+Le serveur sera accessible à l'adresse : http://localhost:3000
+
+## Utilisation
 
 Faites `make` et suivez les instructions du Makefile à la racine du répertoire.
 
@@ -58,7 +104,7 @@ Yassine : Rediger [ce fichier](./documentation/etape/2_Amelioration_de_la_struct
 
 N'importe de qui :Metre en place docker.
 
-## Membres 
+## Membres
 
 - [Coltcivers](https://github.com/Coltcivers)
 - [Transc42](https://github.com/Transc42)
