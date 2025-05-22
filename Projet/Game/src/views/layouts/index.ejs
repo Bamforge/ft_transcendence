@@ -1,0 +1,21 @@
+<!-- views/index.ejs -->
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<link rel="stylesheet" href="/public/assets/css/style.css" />
+		<title>Pong Game</title>
+	</head>
+	<body class="bg-white min-h-screen flex flex-col">
+		<%- include('../partials/header.ejs') %>
+		<div id="app" class="flex-grow flex justify-center items-center">
+			<!-- Dynamic content goes here -->
+			<% if (typeof notFound !== 'undefined' && notFound === true) { %> <%-
+			include('../partials/404.ejs') %> <% } %>
+		</div>
+
+		<script src="/public/client/app/main.js" type="module"></script>
+		<%- include('../partials/footer.ejs') %>
+	</body>
+</html>

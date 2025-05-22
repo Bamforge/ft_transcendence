@@ -8,6 +8,8 @@ COPY ../../Game/public ./public
 COPY ../../Game/src ./src
 COPY ../../Game/tailwindcss ./tailwindcss
 
+COPY ../../Game/config ./config
+
 RUN useradd -m appuser
 
 RUN chown -R appuser:appuser /app
