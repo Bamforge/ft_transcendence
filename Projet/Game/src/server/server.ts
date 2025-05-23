@@ -3,14 +3,22 @@
  */
 import Fastify from 'fastify';
 import fastifyStatic from '@fastify/static';
-import path from 'path';
+import { fileURLToPath } from 'url';
+import { dirname, join } from 'path';
 import fastifyFormbody from '@fastify/formbody';
 import fastifyCookie from '@fastify/cookie';
 import fastifyView from '@fastify/view';
 import ejs from 'ejs';
-import { routes } from './routes/routes';
+import { routes } from './routes/routes.js';
 import dotenv from 'dotenv';
 import getDbAsync from './db/init_db';
+
+/**
+ *
+ */
+// Get __dirname equivalent in ES modules
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 /**
  *
@@ -35,7 +43,7 @@ fastify.register(fastifyView, {
 	engine: {
 		ejs: ejs,
 	},
-	root: __dirname + '/../views',
+	root: join(__dirname, '../views'),
 	includeViewExtension: true,
 });
 
@@ -43,7 +51,7 @@ fastify.register(fastifyView, {
  *
  */
 fastify.register(fastifyStatic, {
-	root: path.join(__dirname, '../public'),
+	root: join(__dirname, '../public'),
 	prefix: '/public/', // optional: default '/'
 });
 

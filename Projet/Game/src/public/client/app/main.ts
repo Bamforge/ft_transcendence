@@ -12,7 +12,11 @@ if (!(appElement instanceof HTMLDivElement)) {
 }
 const appDiv: HTMLDivElement = appElement;
 
+let loadedView: boolean = false;
+
 async function loadView(view: string): Promise<void> {
+	if (loadedView) return; // Prevent multiple loads
+	loadedView = true;
 	try {
 		const response = await fetch(`/api/view/${view}`);
 		if (response.ok) {
@@ -41,6 +45,8 @@ async function loadView(view: string): Promise<void> {
 		}
 	} catch (error) {
 		console.error('Error:', error);
+	} finally {
+		loadedView = false; // Allow future loads
 	}
 }
 
