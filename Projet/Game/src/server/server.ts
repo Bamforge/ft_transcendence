@@ -62,7 +62,7 @@ const PORT = process.env.PORT || 3000;
 /**
  * 
  */
-const db = getDbAsync()
+const db = await getDbAsync()
 
 fastify.listen(
 	{
@@ -78,5 +78,6 @@ fastify.listen(
 );
 
 process.on('SIGINT', async () => {
+	await db.close();
 	process.exit(0);
 });
