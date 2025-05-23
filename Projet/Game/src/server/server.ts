@@ -11,13 +11,15 @@ import fastifyView from '@fastify/view';
 import ejs from 'ejs';
 import { routes } from './routes/routes.js';
 import dotenv from 'dotenv';
-import getDbAsync from './db/init_db';
+import getDbAsync from './controllers/initDb.js';
+import addUserInDb from './controllers/dbUtils/addUser.js';
+import { addUser } from './interface/users.js';
 
 /**
  *
  */
 // Get __dirname equivalent in ES modules
-const __filename = fileURLToPath(import.meta.url);
+const  __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 /**
@@ -70,17 +72,16 @@ const PORT = process.env.PORT || 3000;
 /**
  * 
  */
-const dbAsync = getDbAsync()
+const dbAsync = getDbAsync();
 
-fastify.listen(
-	{
-		port: Number(PORT),
-	},
-	(err, address) => {
+fastify.listen({port: Number(PORT)}, async (err, address) => {
 		if (err) {
 			fastify.log.error(err);
 			process.exit(1);
 		}
+		const newU : addUser = { username : "BOB"};
+		const db = await dbAsync;
+		addUserInDb(db, "bob", newU)
 		fastify.log.info(`Server listening at ${address}`);
 	}
 );

@@ -6,7 +6,7 @@ import { addUser } from '../../interface/users';
 
 const sqlFileAddUser = './../../../../data/insert/001_insert_users_table.sql'
 
-export async function addUserInDb(db: Database<sqlite3.Database, sqlite3.Statement>, newUser: addUser) {
+export default async function addUserInDb(db: Database<sqlite3.Database, sqlite3.Statement>, newUser: addUser) {
 	const {
 		username,
 		password = '',

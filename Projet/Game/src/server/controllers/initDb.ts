@@ -1,7 +1,11 @@
-import path from 'path';
+import path, { dirname } from 'path';
 import sqlite3 from 'sqlite3';
 import { open, Database } from 'sqlite';
 import fs from 'fs';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 // Variables I recommend storing in environment variables for later use.
 
