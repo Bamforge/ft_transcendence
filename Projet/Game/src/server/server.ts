@@ -10,6 +10,7 @@ import fastifyView from '@fastify/view';
 import ejs from 'ejs';
 import { routes } from './routes/routes';
 import dotenv from 'dotenv';
+import getDbAsync from './db/init_db';
 
 /**
  *
@@ -57,6 +58,11 @@ routes.forEach((route) => {
  *
  */
 const PORT = process.env.PORT || 3000;
+
+/**
+ * 
+ */
+const db = getDbAsync()
 
 fastify.listen(
 	{

@@ -1,0 +1,9 @@
+CREATE TABLE IF NOT EXISTS users (
+	id INTEGER PRIMARY KEY AUTOINCREMENT,
+	username TEXT UNIQUE,
+	password TEXT,
+	is_guest BOOLEAN DEFAULT 0,
+	is_bot BOOLEAN DEFAULT 0
+);
+
+PRAGMA foreign_keys = ON;

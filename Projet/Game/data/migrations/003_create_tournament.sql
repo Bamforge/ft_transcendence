@@ -1,0 +1,46 @@
+-- A tournament has:
+-- - number of matches = nbr_participant - 1
+-- - number of rounds = ceil(log2(nbr_participant))
+CREATE TABLE IF NOT EXISTS tournament (
+	id INTEGER PRIMARY KEY AUTOINCREMENT,
+	winner_pseudo TEXT,
+	nbr_participant INTEGER DEFAULT 0 NOT NULL,
+	max_round INTEGER DEFAULT 0 NOT NULL
+	-- For future use (e.g., hosting info, etc.)
+	-- host_id INTEGER NOT NULL,
+	-- FOREIGN KEY (host_id) REFERENCES users(id)
+);
+
+-- Participants in the tournament
+-- Think of it as a triangle structure:
+-- - 'id_in_tournament' is the X-axis position (e.g., 1st, 2nd, etc.)
+-- - 'round' is the Y-axis position (depth)
+CREATE TABLE IF NOT EXISTS tournament_participants (
+	tournament_id INTEGER,
+	user_id INTEGER,
+	id_in_tournament INTEGER,
+	round INTEGER,
+	is_eliminated BOOLEAN DEFAULT 0,
+	is_winner BOOLEAN DEFAULT 0,
+	PRIMARY KEY (tournament_id, user_id),
+	FOREIGN KEY (tournament_id) REFERENCES tournament(id),
+	FOREIGN KEY (user_id) REFERENCES users(id)
+);
+
+-- Matches structure follows a binary heap layout
+-- - left child  = order_match * 2
+-- - right child = order_match * 2 + 1
+-- - parent      = floor(order_match / 2)
+CREATE TABLE IF NOT EXISTS tournament_matchs (
+	tournament_id INTEGER,
+	match_id INTEGER,
+
+	order_match INTEGER NOT NULL,	-- Match number in heap order
+	next_match INTEGER NOT NULL,	-- The match the winner advances to
+	round INTEGER,					-- Match depth (1 = first round)
+	winner_id INTEGER,				-- The winner of the match
+	PRIMARY KEY (tournament_id, match_id),
+	FOREIGN KEY (tournament_id) REFERENCES tournament(id),
+	FOREIGN KEY (match_id) REFERENCES matchs(id),
+	FOREIGN KEY (winner_id) REFERENCES users(id)
+);
