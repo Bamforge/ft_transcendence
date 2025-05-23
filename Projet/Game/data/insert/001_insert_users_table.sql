@@ -1,0 +1,1 @@
+INSERT INTO users (username, password, is_guest, is_bot) VALUES (?, ?, ?, ?)

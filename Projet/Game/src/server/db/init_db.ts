@@ -23,7 +23,7 @@ const listOfCreationTabs = [
  * @param db The database on which the script will be applied
  * @param relativePath Path to the SQL script (relative to __dirname) to execute
  */
-export async function execScriptSql(db: Database<sqlite3.Database, sqlite3.Statement>, relativePath: string) {
+async function execFileScriptSql(db: Database<sqlite3.Database, sqlite3.Statement>, relativePath: string) {
 	try {
 		const scriptSql = fs.readFileSync(path.resolve(__dirname, relativePath), 'utf-8');
 		// console.log(scriptSql);
@@ -55,7 +55,7 @@ async function initDataBase(): Promise<Database<sqlite3.Database, sqlite3.Statem
 	for (let index = 0; index < listOfCreationTabs.length; index++) {
 		const scriptSql = pathOfScriptWhoCreateTabs + listOfCreationTabs[index];
 		// later put the secuirty
-		await execScriptSql(db, scriptSql);
+		await execFileScriptSql(db, scriptSql);
 	}
 
 	return db;
