@@ -81,7 +81,7 @@ fastify.listen({port: Number(PORT)}, async (err, address) => {
 		}
 		const newU : addUser = { username : "BOB"};
 		const db = await dbAsync;
-		addUserInDb(db, "bob", newU)
+		addUserInDb(db, newU)
 		fastify.log.info(`Server listening at ${address}`);
 	}
 );
