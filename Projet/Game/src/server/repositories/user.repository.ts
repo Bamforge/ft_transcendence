@@ -45,8 +45,8 @@ export class UserRepository {
 		return (res);
 	}
 
-	public async getAllUsers() : Promise<User[]> {
-		const res : User[] = await this.db.getSecur(SelectSql[3]);
+	public async getAllUsers() : Promise<Array<User>> {
+		const res : Array<User> = await this.db.allSecur(SelectSql[3]);
 		return (res);
 	}
 
@@ -73,8 +73,8 @@ export class UserRepository {
 			is_bot = oldDataUser.is_bot
 		} = newDataUser;
 		const verifUser = await this.getUserById(oldDataUser.id)
-		if (verifUser == undefined || false == isSameUser(verifUser, oldDataUser))
-			return ;
+		if (verifUser == undefined || false == isSameUser(verifUser, oldDataUser) || await this.isUsernameAlreadyExist(username))
+			return (undefined);
 		return (await this.db.runSecur(UpdateSql[0], username, password, is_guest, is_bot, oldDataUser.id));
 	}
 }

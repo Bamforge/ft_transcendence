@@ -73,6 +73,22 @@ export class DbGestion {
 		return (undefined);
 	}
 
+	public async allSecur(relativePath: string, ...params: any[]) : Promise<any[]>{
+		try {
+			const fullPath : string | null = isValidSqlFile(relativePath);
+
+			if (fullPath == null)
+				return ([]);
+
+			const scriptSqlS = fs.readFileSync(fullPath, 'utf-8');
+			return (await this.db.all(scriptSqlS, params));
+		} catch (err) {
+			console.error(chalk.red(`Erreur lors du all de ce script sql :`) + chalk.yellow(`\'${relativePath}\'`));
+			console.error(err);
+		}
+		return ([]);
+	}
+
 	/**
 	 * Executes an SQL script on the given database.
 	 * 

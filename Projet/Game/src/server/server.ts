@@ -11,7 +11,7 @@ import fastifyView from '@fastify/view';
 import ejs from 'ejs';
 import { routes } from './routes/routes.js';
 import dotenv from 'dotenv';
-import { addUser, GetUserDataString, User } from './interfaces/users.js';
+import { addUser, GetUserDataString, GetUsersDataString, User } from './interfaces/users.js';
 import chalk from 'chalk';
 import { DbGestion } from './db/dbGestion.js';
 import { UserRepository } from './repositories/user.repository.js';
@@ -92,9 +92,12 @@ async function test_tab_user(db: DbGestion)
 		console.log(`Le user à id 1 dans la Db : ${GetUserDataString(user)}`);
 		if (user != undefined)
 		{
-			await tabUserGestion.updateUser(user, {username:"Alice", password:"NON", is_bot:false})
-			console.log("Update");
+			if (await tabUserGestion.updateUser(user, {username:"Alice", password:"NON", is_bot:false}) == undefined)
+				console.log(chalk.yellow(`⚠️  Attention, Impossible de update faire un update`));
+			else
+				console.log(chalk.green(`✅ Update reussi`));
 		}
+		console.log(GetUsersDataString(await tabUserGestion.getAllUsers()));
 }
 
 const startServer = async () => {

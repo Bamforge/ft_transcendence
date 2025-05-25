@@ -31,7 +31,7 @@ export function GetUserDataString(user : User | undefined): string
 	${chalk.blue('is_bot')} : ${chalk.green(user.is_bot)};
 	${chalk.blue('create_at')} : ${chalk.green(user.create_at)};
 }
-	`;
+`;
 	return (data_str);
 }
 
@@ -47,4 +47,10 @@ export function isSameUser(user1 : User | undefined, user2 : User | undefined): 
 		user1.password == user2.password &&
 		user1.username == user2.username
 	)
+}
+
+export function GetUsersDataString(users: Array<User>): string {
+	if (!Array.isArray(users) || users.length === 0)
+		return chalk.red("Aucune donnée : tableau vide ou invalide.");
+	return users.map(GetUserDataString).join();
 }
