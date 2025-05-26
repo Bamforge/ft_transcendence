@@ -1,0 +1,1 @@
+SELECT * FROM matchs WHERE is_end = 0 AND (player_1_id = ? OR player_2_id = ?) LIMIT 1; 

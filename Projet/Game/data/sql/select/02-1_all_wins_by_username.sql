@@ -1,0 +1,1 @@
+SELECT * FROM tournament_elimination WHERE winner_pseudo = ?

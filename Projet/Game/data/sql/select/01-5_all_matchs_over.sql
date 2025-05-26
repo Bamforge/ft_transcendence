@@ -1,0 +1,1 @@
+SELECT * FROM matchs WHERE is_end = 1;

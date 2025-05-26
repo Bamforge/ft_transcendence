@@ -1,0 +1,1 @@
+SELECT * FROM tournament_elimination WHERE id = ? LIMIT 1

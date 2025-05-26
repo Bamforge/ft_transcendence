@@ -1,0 +1,1 @@
+INSERT INTO tournament_elimination (nbr_participant, max_round) VALUES (?, ?)

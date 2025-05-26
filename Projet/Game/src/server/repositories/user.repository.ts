@@ -2,6 +2,7 @@ import { DbGestion } from "../db/dbGestion.js";
 import { addUser, isSameUser, User } from "../interfaces/users.js";
 import sqlite3 from 'sqlite3';
 import { ISqlite } from 'sqlite';
+import { error } from "console";
 
 const pData = "./../../../data/sql/"
 
@@ -17,7 +18,7 @@ const SelectSql = [
 
 const dInsert = "insert/"
 const InsertSql = [
-	pData + dInsert + "00-1_users.sql",
+	pData + dInsert + "00-0_users.sql",
 ]
 
 const dUpdate = "updates/"
@@ -25,13 +26,27 @@ const UpdateSql = [
 	pData + dUpdate + "00-0_user_name_password_bot_guest_by_id.sql",
 ]
 
+export type AddUserResult =
+	| { status: "success", data: ISqlite.RunResult<sqlite3.Statement> }
+	| { status: "already_exists" }
+	| { status: "error" };
+
+export type UpdateUserResult =
+	| { status: "success"; data: ISqlite.RunResult<sqlite3.Statement> }
+	| { status: "invalid_user" }
+	| { status: "username_exists" }
+	| { status: "error" };
+
+export type GetUserResult =
+	| { status: "success"; data: User }
+	| { status: "error" };
 
 export class UserRepository {
 	constructor(private db: DbGestion) {}
 
-	public async getUserByUsername(username: string) : Promise<User | undefined>{
+	public async getUserByUsername(username: string) : Promise<GetUserResult>{
 		const res : User | undefined = await this.db.getSecur(SelectSql[0], username);
-		return (res);
+		return (res == undefined ? {status : "error"} : {status : "success", data : res});
 	}
 
 	public async isUsernameAlreadyExist(username: string) : Promise<boolean>{
@@ -39,10 +54,9 @@ export class UserRepository {
 		return (res != undefined);
 	}
 
-
-	public async getUserById(id: number) : Promise<User | undefined>{
+	public async getUserById(id: number) :Promise<GetUserResult>{
 		const res : User | undefined = await this.db.getSecur(SelectSql[2], id);
-		return (res);
+		return (res == undefined ? {status : "error"} : {status : "success", data : res});
 	}
 
 	public async getAllUsers() : Promise<Array<User>> {
@@ -50,7 +64,7 @@ export class UserRepository {
 		return (res);
 	}
 
-	public async addUser(newUser: addUser): Promise<ISqlite.RunResult<sqlite3.Statement> | null | undefined> {
+	public async addUser(newUser: addUser): Promise<AddUserResult> {
 		const {
 			username,
 			password = '',
@@ -59,22 +73,25 @@ export class UserRepository {
 		} = newUser;
 
 		if (await this.isUsernameAlreadyExist(username))
-			return (null);
+			return ({status: "already_exists" });
 
 		const res = await this.db.runSecur(InsertSql[0], username, password, is_guest, is_bot);
-		return (res);
+		return (res == undefined ? { status: "error" } : {status: "success", data: res});
 	}
 
-	public async updateUser(oldDataUser: User, newDataUser : addUser) : Promise<ISqlite.RunResult<sqlite3.Statement> | undefined> {
+	public async updateUser(controlDataUser: User, newDataUser : addUser) : Promise<UpdateUserResult> {
 		const {
-			username = oldDataUser.username,
-			password = oldDataUser.password,
-			is_guest = oldDataUser.is_guest,
-			is_bot = oldDataUser.is_bot
+			username = controlDataUser.username,
+			password = controlDataUser.password,
+			is_guest = controlDataUser.is_guest,
+			is_bot = controlDataUser.is_bot
 		} = newDataUser;
-		const verifUser = await this.getUserById(oldDataUser.id)
-		if (verifUser == undefined || false == isSameUser(verifUser, oldDataUser) || await this.isUsernameAlreadyExist(username))
-			return (undefined);
-		return (await this.db.runSecur(UpdateSql[0], username, password, is_guest, is_bot, oldDataUser.id));
+		const verifUser : GetUserResult = await this.getUserById(controlDataUser.id)
+		if (verifUser.status == "error" || false == isSameUser(verifUser.data, controlDataUser))
+			return ({status: "invalid_user"});
+		else if (await this.isUsernameAlreadyExist(username))
+			return ({status: "username_exists"});
+		const res = await this.db.runSecur(UpdateSql[0], username, password, is_guest, is_bot, controlDataUser.id);
+		return (res == undefined ? {status:"error"} : {status: "success", data : res});
 	}
 }

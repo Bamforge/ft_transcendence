@@ -11,10 +11,11 @@ import fastifyView from '@fastify/view';
 import ejs from 'ejs';
 import { routes } from './routes/routes.js';
 import dotenv from 'dotenv';
-import { addUser, GetUserDataString, GetUsersDataString, User } from './interfaces/users.js';
 import chalk from 'chalk';
 import { DbGestion } from './db/dbGestion.js';
-import { UserRepository } from './repositories/user.repository.js';
+import test_tab_user from './test/user.js';
+import test_tab_match from './test/match.js';
+import test_tab_TE from './test/tournament.js';
 
 /**
  *
@@ -75,30 +76,6 @@ const PORT = process.env.PORT || 3000;
  */
 const db = new DbGestion();
 
-/**
- *
- */
-async function test_tab_user(db: DbGestion)
-{
-		const tabUserGestion = new UserRepository(db);
-		const testname = "BOB";
-
-		if (await tabUserGestion.addUser({ username: testname, password : "a" }) == null)
-			console.log(chalk.yellow(`⚠️  Attention, le username : '${testname}' existe déjà, on ne peut pas le rajouter.`));
-		else
-			console.log(chalk.green(`✅ Ajout du username : '${testname}' dans le tableau users.`));
-
-		const user: User | undefined = await tabUserGestion.getUserById(1);
-		console.log(`Le user à id 1 dans la Db : ${GetUserDataString(user)}`);
-		if (user != undefined)
-		{
-			if (await tabUserGestion.updateUser(user, {username:"Alice", password:"NON", is_bot:false}) == undefined)
-				console.log(chalk.yellow(`⚠️  Attention, Impossible de update faire un update`));
-			else
-				console.log(chalk.green(`✅ Update reussi`));
-		}
-		console.log(GetUsersDataString(await tabUserGestion.getAllUsers()));
-}
 
 const startServer = async () => {
 	try {
@@ -106,6 +83,10 @@ const startServer = async () => {
 
 		await test_tab_user(db);
 
+		await test_tab_match(db);
+
+		await test_tab_TE(db);
+	
 		const address = await fastify.listen({ port: Number(PORT) });
 		console.log(`Server listening at ${address}`);
 

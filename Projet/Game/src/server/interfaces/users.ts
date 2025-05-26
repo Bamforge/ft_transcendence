@@ -21,7 +21,7 @@ import chalk from 'chalk';
 export function GetUserDataString(user : User | undefined): string
 {
 	if (user == undefined)
-		return chalk.red("Aucune donnée : c'est indéfini.");
+		return chalk.red("Aucune donnée de user: c'est indéfini.");
 	const data_str : string = `
 {
 	${chalk.blue('id')} : ${chalk.green(user.id)};
@@ -51,6 +51,6 @@ export function isSameUser(user1 : User | undefined, user2 : User | undefined): 
 
 export function GetUsersDataString(users: Array<User>): string {
 	if (!Array.isArray(users) || users.length === 0)
-		return chalk.red("Aucune donnée : tableau vide ou invalide.");
+		return chalk.red("Aucune donnée du tableaux users : tableau vide ou invalide.");
 	return users.map(GetUserDataString).join();
 }

@@ -1,0 +1,1 @@
+INSERT INTO matchs (player_1_id, player_2_id) VALUES (?, ?)

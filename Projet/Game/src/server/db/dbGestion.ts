@@ -24,7 +24,7 @@ const pathOfScriptWhoCreateTabs = pathDirData + "sql/create/"
 const listOfCreationTabs = [
 	'00_users_table.sql',
 	'01_matchs_tables.sql',
-	'02_tournament.sql'
+	'02_tournament_elimination.sql'
 ]
 
 export class DbGestion {
@@ -64,8 +64,13 @@ export class DbGestion {
 			if (fullPath == null)
 				return;
 
-			const scriptSqlS = fs.readFileSync(fullPath, 'utf-8');
-			return (await this.db.get(scriptSqlS, params));
+			const scriptSql = fs.readFileSync(fullPath, 'utf-8');
+			if (scriptSql == "")
+			{
+				console.error(chalk.red(`Erreur ATTENTION Fichier sql vide :`) + chalk.yellow(`\'${relativePath}\'`));
+				return;
+			}
+			return (await this.db.get(scriptSql, params));
 		} catch (err) {
 			console.error(chalk.red(`Erreur lors du get de ce script sql :`) + chalk.yellow(`\'${relativePath}\'`));
 			console.error(err);
@@ -80,8 +85,13 @@ export class DbGestion {
 			if (fullPath == null)
 				return ([]);
 
-			const scriptSqlS = fs.readFileSync(fullPath, 'utf-8');
-			return (await this.db.all(scriptSqlS, params));
+			const scriptSql = fs.readFileSync(fullPath, 'utf-8');
+			if (scriptSql == "")
+			{
+				console.error(chalk.red(`Erreur ATTENTION Fichier sql vide :`) + chalk.yellow(`\'${relativePath}\'`));
+				return ([]);
+			}
+			return (await this.db.all(scriptSql, params));
 		} catch (err) {
 			console.error(chalk.red(`Erreur lors du all de ce script sql :`) + chalk.yellow(`\'${relativePath}\'`));
 			console.error(err);
@@ -103,6 +113,11 @@ export class DbGestion {
 				return;
 
 			const scriptSql = fs.readFileSync(fullPath, 'utf-8');
+			if (scriptSql == "")
+			{
+				console.error(chalk.red(`Erreur ATTENTION Fichier sql vide :`) + chalk.yellow(`\'${relativePath}\'`));
+				return ;
+			}
 			await this.db.exec(scriptSql);
 		} catch (err) {
 			console.error(chalk.red(`Erreur lors de l'execution de ce script sql :`) + chalk.yellow(`\'${relativePath}\'`));
@@ -117,8 +132,13 @@ export class DbGestion {
 			if (fullPath == null)
 				return;
 
-			const scriptSqlS = fs.readFileSync(fullPath, 'utf-8');
-			const res = await this.db.run(scriptSqlS, params);
+			const scriptSql = fs.readFileSync(fullPath, 'utf-8');
+			if (scriptSql == "")
+			{
+				console.error(chalk.red(`Erreur ATTENTION Fichier sql vide :`) + chalk.yellow(`\'${relativePath}\'`));
+				return (undefined);
+			}
+			const res = await this.db.run(scriptSql, params);
 			return (res);
 		} catch (err) {
 			console.error(chalk.red(`Erreur lors du run de ce script sql :`) + chalk.yellow(`\'${relativePath}\'`));
