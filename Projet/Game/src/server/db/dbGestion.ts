@@ -150,4 +150,32 @@ export class DbGestion {
 	public async closeSecur(): Promise<void> {
 		return (await this.db.close());
 	}
+
+	public async prepareSecur(relativePath: string, params: any[][]): Promise<ISqlite.RunResult<sqlite3.Statement>[] | undefined> {
+		try {
+			const fullPath: string | null = isValidSqlFile(relativePath);
+
+			if (fullPath == null) return;
+
+			const scriptSql = fs.readFileSync(fullPath, 'utf-8');
+			if (scriptSql === "") {
+				console.error(chalk.red(`Erreur ATTENTION Fichier sql vide :`) + chalk.yellow(`\'${relativePath}\'`));
+				return;
+			}
+
+			const stmt = await this.db.prepare(scriptSql);
+			const results: ISqlite.RunResult<sqlite3.Statement>[] = [];
+
+			for (const paramSet of params) {
+				results.push(await stmt.run(...paramSet));
+			}
+
+			await stmt.finalize();
+			return results;
+
+		} catch (err) {
+			console.error(chalk.red(`Erreur lors du prepare+run multiple de ce script sql :`) + chalk.yellow(`\'${relativePath}\'`));
+			console.error(err);
+		}
+	}
 }

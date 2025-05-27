@@ -13,7 +13,8 @@ const SelectSql = [
 	pData + dSelect + "00-0_users_by_username.sql",
 	pData + dSelect + "00-1_1_by_username.sql",
 	pData + dSelect + "00-2_user_by_id.sql",
-	pData + dSelect + "00-3_all_users.sql"
+	pData + dSelect + "00-3_all_users.sql",
+	pData + dSelect + "00-4_all_id_users.sql"
 ]
 
 const dInsert = "insert/"
@@ -61,6 +62,12 @@ export class UserRepository {
 
 	public async getAllUsers() : Promise<Array<User>> {
 		const res : Array<User> = await this.db.allSecur(SelectSql[3]);
+		return (res);
+	}
+
+	public async getAllIdUsers() : Promise<number[]> {
+		const rows: { id: number }[] = await this.db.allSecur(SelectSql[4]);
+		const res = rows.map(row => row.id);
 		return (res);
 	}
 

@@ -21,13 +21,15 @@ CREATE TABLE IF NOT EXISTS tournament_elimination (
 -- Think of it as a triangle structure:
 -- - 'id_in_tournament_elimination' is the X-axis position (e.g., 1st, 2nd, etc.)
 -- - 'round' is the Y-axis position (depth)
-CREATE TABLE IF NOT EXISTS tournament_elimination_participants (
-	tournament_elimination_id INTEGER,
-	user_id INTEGER,
+CREATE TABLE IF NOT EXISTS tournament_elimination_players (
+	tournament_elimination_id INTEGER NOT NULL,
+	user_id INTEGER NOT NULL,
 	id_in_tournament_elimination INTEGER,
 	round INTEGER,
+
 	is_eliminated BOOLEAN DEFAULT 0,
 	is_winner BOOLEAN DEFAULT 0,
+
 	PRIMARY KEY (tournament_elimination_id, user_id),
 	FOREIGN KEY (tournament_elimination_id) REFERENCES tournament_elimination(id),
 	FOREIGN KEY (user_id) REFERENCES users(id)
@@ -40,11 +42,11 @@ CREATE TABLE IF NOT EXISTS tournament_elimination_participants (
 CREATE TABLE IF NOT EXISTS tournament_elimination_matchs (
 	tournament_elimination_id INTEGER,
 	match_id INTEGER,
-
 	order_match INTEGER NOT NULL,	-- Match number in heap order
 	next_match_order INTEGER,		-- The match the winner advances to
 	round INTEGER,					-- Match depth (1 = first round)
 	winner_id INTEGER,				-- The winner of the match
+
 	PRIMARY KEY (tournament_elimination_id, match_id),
 	FOREIGN KEY (tournament_elimination_id) REFERENCES tournament_elimination(id),
 	FOREIGN KEY (match_id) REFERENCES matchs(id),

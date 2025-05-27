@@ -1,8 +1,6 @@
 import { DbGestion } from "../db/dbGestion.js";
-import { addUser, isSameUser, User } from "../interfaces/users.js";
 import sqlite3 from 'sqlite3';
 import { ISqlite } from 'sqlite';
-import { error } from "console";
 import { addTournamentElimination, GetTournamentEliminationDataString, isSameTournamentElimination, TournamentElimination } from "../interfaces/tournament.js";
 
 const pData = "./../../../data/sql/"

@@ -16,6 +16,7 @@ import { DbGestion } from './db/dbGestion.js';
 import test_tab_user from './test/user.js';
 import test_tab_match from './test/match.js';
 import test_tab_TE from './test/tournament.js';
+import test_tab_TEPlayer from './test/tournament_player.js';
 
 /**
  *
@@ -87,6 +88,8 @@ const startServer = async () => {
 
 		await test_tab_TE(db);
 	
+		await test_tab_TEPlayer(db);
+
 		const address = await fastify.listen({ port: Number(PORT) });
 		console.log(`Server listening at ${address}`);
 
