@@ -1,8 +1,8 @@
 import chalk from "chalk";
-import { GetMatchDataString, GetMatchsDataString } from "../interfaces/match.js";
-import { GetUserResult, UserRepository } from "../repositories/user.repository.js";
-import { MatchRepository } from "../repositories/match.repository.js";
-import { DbGestion } from "../db/dbGestion.js";
+import { GetMatchDataString, GetMatchsDataString } from "../../interfaces/tabsDb/match.js";
+import { GetUserResult, UserRepository } from "../../repositories/tabsDb/user.repository.js";
+import { MatchRepository } from "../../repositories/tabsDb/match.repository.js";
+import { DbGestion } from "../../db/dbGestion.js";
 
 /**
  *

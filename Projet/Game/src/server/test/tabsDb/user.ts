@@ -1,7 +1,7 @@
 import chalk from "chalk";
-import { DbGestion } from "../db/dbGestion.js";
-import { GetUserResult, UserRepository } from "../repositories/user.repository.js";
-import { GetUserDataString, GetUsersDataString } from "../interfaces/users.js";
+import { DbGestion } from "../../db/dbGestion.js";
+import { GetUserResult, UserRepository } from "../../repositories/tabsDb/user.repository.js";
+import { GetUserDataString, GetUsersDataString } from "../../interfaces/tabsDb/users.js";
 
 /**
  *

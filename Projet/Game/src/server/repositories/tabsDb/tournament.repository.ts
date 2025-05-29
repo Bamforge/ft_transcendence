@@ -1,7 +1,7 @@
-import { DbGestion } from "../db/dbGestion.js";
+import { DbGestion } from "../../db/dbGestion.js";
 import sqlite3 from 'sqlite3';
 import { ISqlite } from 'sqlite';
-import { addTournamentElimination, GetTournamentEliminationDataString, isSameTournamentElimination, TournamentElimination } from "../interfaces/tournament.js";
+import { addTournamentElimination, GetTournamentEliminationDataString, isSameTournamentElimination, TournamentElimination } from "../../interfaces/tabsDb/tournament.js";
 
 const pData = "./../../../data/sql/"
 
@@ -107,7 +107,7 @@ export class TournamentEliminationRepository {
 /////////////////////////// INSERT
 
 	public async addTE(newTE: addTournamentElimination): Promise<AddTournamentEliminationResult> {
-		if (newTE.nbr_participant <= 0)
+		if (newTE.nbr_participant <= 1)
 			return ({status:"invalide_param"});
 		const nbr_round: number = Math.ceil(Math.log2(newTE.nbr_participant));
 		const res = await this.db.runSecur(InsertSql[0], newTE.nbr_participant, nbr_round);

@@ -1,5 +1,5 @@
-import { DbGestion } from "../db/dbGestion.js";
-import { addUser, isSameUser, User } from "../interfaces/users.js";
+import { DbGestion } from "../../db/dbGestion.js";
+import { addUser, isSameUser, User } from "../../interfaces/tabsDb/users.js";
 import sqlite3 from 'sqlite3';
 import { ISqlite } from 'sqlite';
 import { error } from "console";

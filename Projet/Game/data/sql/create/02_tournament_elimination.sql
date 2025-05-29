@@ -41,13 +41,11 @@ CREATE TABLE IF NOT EXISTS tournament_elimination_players (
 -- - parent      = floor(order_match / 2)
 CREATE TABLE IF NOT EXISTS tournament_elimination_matchs (
 	tournament_elimination_id INTEGER,
-	match_id INTEGER,
 	order_match INTEGER NOT NULL,	-- Match number in heap order
-	next_match_order INTEGER,		-- The match the winner advances to
-	round INTEGER,					-- Match depth (1 = first round)
-	winner_id INTEGER,				-- The winner of the match
+	match_id INTEGER DEFAULT NULL,
+	winner_id INTEGER DEFAULT NULL,	-- The winner of the match
 
-	PRIMARY KEY (tournament_elimination_id, match_id),
+	PRIMARY KEY (tournament_elimination_id, order_match),
 	FOREIGN KEY (tournament_elimination_id) REFERENCES tournament_elimination(id),
 	FOREIGN KEY (match_id) REFERENCES matchs(id),
 	FOREIGN KEY (winner_id) REFERENCES users(id)

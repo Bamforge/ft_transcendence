@@ -1,7 +1,7 @@
-import { DbGestion } from "../db/dbGestion.js";
+import { DbGestion } from "../../db/dbGestion.js";
 import sqlite3 from 'sqlite3';
 import { ISqlite } from 'sqlite';
-import { addTEPlayer, isSameTEPlayer, TEPlayer } from "../interfaces/tournament_player.js";
+import { addTEPlayer, isSameTEPlayer, TEPlayer } from "../../interfaces/tabsDb/tournament_player.js";
 
 const pData = "./../../../data/sql/"
 
@@ -35,7 +35,7 @@ export type AddTEPlayerResult =
 	| { status: "already_exists" }
 	| { status: "error" };
 
-export type UpdateTournamentEliminationResult =
+export type UpdateTEPlayerResult =
 	| { status: "success", data: ISqlite.RunResult<sqlite3.Statement> | null }
 	| { status: "not_found" }
 	| { status: "already_win" }
@@ -45,7 +45,7 @@ export type UpdateTournamentEliminationResult =
 	| { status: "invalide_param" }
 	| { status: "no_change" };
 
-export type GetTournamentEliminationResult =
+export type GetTEPlayerResult =
 	| { status: "success"; data: TEPlayer }
 	| { status: "error" };
 
@@ -81,11 +81,12 @@ export class TEPlayerRepository {
 		if (newTEPlayers.some(player => player.round <= 0))
 			return { status: "invalide_param" };
 
-		for (const player of newTEPlayers) {
-			if (await this.isTEPlayerAlreadyExist(player.tournament_elimination_id, player.user_id)) {
-				return { status: "already_exists" };
-			}
-		}
+		// sqlite verife deja tout seul pour moi
+		// for (const player of newTEPlayers) {
+		// 	if (await this.isTEPlayerAlreadyExist(player.tournament_elimination_id, player.user_id)) {
+		// 		return { status: "already_exists" };
+		// 	}
+		// }
 
 		const paramList: any[][] = newTEPlayers.map((player, index) => [
 			player.tournament_elimination_id,
@@ -126,7 +127,6 @@ export class TEPlayerRepository {
 				index + 1,
 				Math.ceil(Math.log2(idUsers.length))
 			];
-			console.log("Paramètre généré :", row);
 			return row;
 		});
 
@@ -140,11 +140,11 @@ export class TEPlayerRepository {
 /////////////////////////// INSERT
 
 
-	public async getTEPlayerByTEidAndUserid(TEid: number, Userid: number) : Promise<GetTournamentEliminationResult>{
+	public async getTEPlayerByTEidAndUserid(TEid: number, Userid: number) : Promise<GetTEPlayerResult>{
 		const res : TEPlayer | undefined = await this.db.getSecur(SelectSql[0], TEid, Userid);
 		return (res == undefined ? {status : "error"} : {status : "success", data : res});
 	}
-	public async getTEPlayerByTEidAndIdInTE(TEid: number, idInTE: number): Promise<GetTournamentEliminationResult> {
+	public async getTEPlayerByTEidAndIdInTE(TEid: number, idInTE: number): Promise<GetTEPlayerResult> {
 		const res: TEPlayer | undefined = await this.db.getSecur(SelectSql[1], TEid, idInTE);
 		return res === undefined ? { status: "error" } : { status: "success", data: res };
 	}
@@ -161,26 +161,28 @@ export class TEPlayerRepository {
 
 	/////////////////////////// UPDATE
 
-	private handleUpdateResult(res: ISqlite.RunResult<sqlite3.Statement> | undefined, onZeroChange: UpdateTournamentEliminationResult)
-	: UpdateTournamentEliminationResult {
+	private handleUpdateResult(res: ISqlite.RunResult<sqlite3.Statement> | undefined, onZeroChange: UpdateTEPlayerResult)
+	: UpdateTEPlayerResult {
 		if (res === undefined) return { status: "error" };
 		if (res.changes === 0) return onZeroChange;
 		return { status: "success", data: res };
 	}
 
-	public async updateRound(TEPlayerController: TEPlayer, newRound: number): Promise<UpdateTournamentEliminationResult> {
-		const verifTEP : GetTournamentEliminationResult = await this.getTEPlayerByTEidAndUserid(TEPlayerController.tournament_elimination_id, TEPlayerController.user_id);
+	public async updateRound(TEPlayerController: TEPlayer, newRound: number): Promise<UpdateTEPlayerResult> {
+		const verifTEP : GetTEPlayerResult = await this.getTEPlayerByTEidAndUserid(TEPlayerController.tournament_elimination_id, TEPlayerController.user_id);
 		if (verifTEP.status == "error")
 			return ({status: 'not_found'});
 		else if (false == isSameTEPlayer(verifTEP.data, TEPlayerController))
 			return ({status: "no_match_data"});
 		else if (newRound <= 0)
 			return ({status: "invalide_param"});
+		else if (TEPlayerController.is_eliminated)
+			return ({status: "already_ended"});
 		const res = await this.db.runSecur(UpdateSql[0], newRound, TEPlayerController.tournament_elimination_id, TEPlayerController.user_id);
 		return this.handleUpdateResult(res, { status: "no_change" });
 	}
 
-	public async markEliminated(TEPlayerController: TEPlayer): Promise<UpdateTournamentEliminationResult> {
+	public async markEliminated(TEPlayerController: TEPlayer): Promise<UpdateTEPlayerResult> {
 		const verifTEP = await this.getTEPlayerByTEidAndUserid(
 			TEPlayerController.tournament_elimination_id, TEPlayerController.user_id);
 		if (verifTEP.status === "error") return { status: "not_found" };
@@ -194,7 +196,7 @@ export class TEPlayerRepository {
 		return this.handleUpdateResult(res, { status: "no_change" });
 	}
 
-	public async markWinner(TEPlayerController: TEPlayer): Promise<UpdateTournamentEliminationResult> {
+	public async markWinner(TEPlayerController: TEPlayer): Promise<UpdateTEPlayerResult> {
 		const verifTEP = await this.getTEPlayerByTEidAndUserid(
 			TEPlayerController.tournament_elimination_id,
 			TEPlayerController.user_id

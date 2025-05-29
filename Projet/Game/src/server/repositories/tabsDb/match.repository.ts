@@ -1,7 +1,7 @@
-import { DbGestion } from "../db/dbGestion.js";
+import { DbGestion } from "../../db/dbGestion.js";
 import sqlite3 from 'sqlite3';
 import { ISqlite } from 'sqlite';
-import { addMatch, isSameMatch, Match } from "../interfaces/match.js";
+import { addMatch, isSameMatch, Match } from "../../interfaces/tabsDb/match.js";
 
 const pData = "./../../../data/sql/"
 
@@ -16,6 +16,7 @@ const SelectSql = [
 	pData + dSelect + "01-4_all_matchs_in_progress.sql",
 	pData + dSelect + "01-5_all_matchs_over.sql",
 	pData + dSelect + "01-6_player_currently_playing.sql",
+	pData + dSelect + "01-7_who_win.sql",
 
 ]
 
@@ -91,6 +92,13 @@ export class MatchRepository {
 	public async isPlayerCurrently(id: number) : Promise<boolean> {
 		const res : Match[] = await this.db.getSecur(SelectSql[6], id, id);
 		return (res != undefined);
+	}
+
+	public async getWinner(id: number) : Promise<number | undefined>{
+		const res = await this.db.getSecur(SelectSql[7], id);
+		if (res == undefined)
+			return (res)
+		return (res.winner_id);
 	}
 
 	public async addMatch(newMatch: addMatch): Promise<AddMatchResult> {
