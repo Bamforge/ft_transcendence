@@ -2,7 +2,7 @@ export interface addTEPlayer
 {
 	tournament_elimination_id : number;
 	user_id : number;
-	round : number;
+	maxRound: number;
 }
 
 export interface TEPlayer

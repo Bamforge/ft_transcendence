@@ -151,7 +151,7 @@ export class DbGestion {
 		return (await this.db.close());
 	}
 
-	public async prepareSecur(relativePath: string, params: any[][] | any[]): Promise<ISqlite.RunResult<sqlite3.Statement>[] | undefined> {
+	public async prepareSecur(relativePath: string, params: any[][] | any[], type : "Run" | "Get"): Promise<any[] | undefined> {
 		try {
 			const fullPath: string | null = isValidSqlFile(relativePath);
 
@@ -164,16 +164,22 @@ export class DbGestion {
 			}
 
 			const stmt = await this.db.prepare(scriptSql);
-			const results: ISqlite.RunResult<sqlite3.Statement>[] = [];
+			const results: any[] = [];
 
 			if (Array.isArray(params) && Array.isArray(params[0]))
 			{
-				for (const paramSet of params) {
-					results.push(await stmt.run(...paramSet));
-				}
+				if (type == "Run")
+					for (const paramSet of params) {results.push(await stmt.run(...paramSet));}
+				else if (type == "Get")
+					for (const paramSet of params) {results.push(await stmt.get(...paramSet));}
 			}
 			else
-				results.push(await stmt.run(params));
+			{
+				if (type == "Run")
+					results.push(await stmt.run(params));
+				else if (type == "Get")
+					results.push(await stmt.run(params));
+			}
 
 			await stmt.finalize();
 			return results;

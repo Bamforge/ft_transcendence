@@ -13,11 +13,7 @@ import { routes } from './routes/routes.js';
 import dotenv from 'dotenv';
 import chalk from 'chalk';
 import { DbGestion } from './db/dbGestion.js';
-import test_tab_user from './test/tabsDb/user.js';
-import test_tab_match from './test/tabsDb/match.js';
-import test_tab_TE from './test/tabsDb/tournament.js';
-import test_tab_TEPlayer from './test/tabsDb/tournament_player.js';
-import test_tab_TEMatch from './test/tabsDb/tournament_match.js';
+import test_transandance from './test/transandance.js';
 
 /**
  *
@@ -79,20 +75,15 @@ const PORT = process.env.PORT || 3000;
 const db = new DbGestion();
 
 
+// netoyer le code
+// re verifier transandance class quoi
+
 const startServer = async () => {
 	try {
 		await db.init();
 
-		await test_tab_user(db);
-
-		await test_tab_match(db);
-
-		await test_tab_TE(db);
+		await test_transandance(db);
 	
-		await test_tab_TEPlayer(db);
-
-		await test_tab_TEMatch(db);
-
 		const address = await fastify.listen({ port: Number(PORT) });
 		console.log(`Server listening at ${address}`);
 

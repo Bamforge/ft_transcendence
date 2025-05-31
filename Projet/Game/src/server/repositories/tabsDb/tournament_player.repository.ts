@@ -63,22 +63,18 @@ export class TEPlayerRepository {
 		const {
 			tournament_elimination_id,
 			user_id,
-			round,
 		} = newTEPlayer;
 		if (await this.isTEPlayerAlreadyExist(tournament_elimination_id, user_id))
 			return ({status : "already_exists"});
-		else if (round <= 0)
-			return ({status : "invalide_param"});
-		const res = await this.db.runSecur(InsertSql[0], tournament_elimination_id, user_id, id_in_tournament_elimination, round);
+		const res = await this.db.runSecur(InsertSql[0], tournament_elimination_id, user_id, id_in_tournament_elimination);
 		return (res == undefined ? { status: "error" } : {status: "success", data: res});
 	}
 
 	public async addTEPlayers(newTEPlayers: addTEPlayer[]): Promise<AddTEPlayerResult> {
-
 		if (!newTEPlayers || newTEPlayers.length === 0)
 			return { status: "invalide_param" };
-	
-		if (newTEPlayers.some(player => player.round <= 0))
+
+		if (newTEPlayers.some(player => player.maxRound != undefined && player.maxRound <= 0))
 			return { status: "invalide_param" };
 
 		// sqlite verife deja tout seul pour moi
@@ -92,10 +88,10 @@ export class TEPlayerRepository {
 			player.tournament_elimination_id,
 			player.user_id,
 			index + 1,
-			player.round
+			player.maxRound
 		]);
 
-		const res = await this.db.prepareSecur(InsertSql[0], paramList);
+		const res = await this.db.prepareSecur(InsertSql[0], paramList, "Run");
 
 		if (res === undefined)
 			return { status: "error" };
@@ -130,7 +126,7 @@ export class TEPlayerRepository {
 			return row;
 		});
 
-		const res = await this.db.prepareSecur(InsertSql[0], paramList);
+		const res = await this.db.prepareSecur(InsertSql[0], paramList, "Run");
 
 		if (res === undefined)
 			return { status: "error" };

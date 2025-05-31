@@ -1,6 +1,6 @@
 import chalk from "chalk";
 import { DbGestion } from "../../db/dbGestion.js";
-import { TEMatchRepository } from "../../repositories/tabsDb/tournament_match.repository copy.js";
+import { TEMatchRepository } from "../../repositories/tabsDb/tournament_match.repository.js";
 import { MatchRepository } from "../../repositories/tabsDb/match.repository.js";
 import { TournamentEliminationRepository } from "../../repositories/tabsDb/tournament.repository.js";
 import { GetTEMatchDataString, GetTEMatchsDataString } from "../../interfaces/tabsDb/tournament_match.js";

@@ -109,7 +109,7 @@ export class TournamentEliminationRepository {
 	public async addTE(newTE: addTournamentElimination): Promise<AddTournamentEliminationResult> {
 		if (newTE.nbr_participant <= 1)
 			return ({status:"invalide_param"});
-		const nbr_round: number = Math.ceil(Math.log2(newTE.nbr_participant));
+		const nbr_round: number = Math.ceil(Math.log2(newTE.nbr_participant))+1;
 		const res = await this.db.runSecur(InsertSql[0], newTE.nbr_participant, nbr_round);
 		return (res == undefined ? { status: "error" } : {status: "success", data: res});
 	}

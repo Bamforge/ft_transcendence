@@ -72,7 +72,7 @@ export class TEMatchRepository {
 		// Filtrer les utilisateurs qui n'existent pas déjà
 		const tableau = Array.from({ length: te.nbr_participant - 1 }, (_, i) => [te.id, i + 1]);
 
-		const res = await this.db.prepareSecur(InsertSql[0], tableau);
+		const res = await this.db.prepareSecur(InsertSql[0], tableau, "Run");
 
 		if (res === undefined)
 			return { status: "error" };

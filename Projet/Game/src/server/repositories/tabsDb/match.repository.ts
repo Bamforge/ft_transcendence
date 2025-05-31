@@ -17,7 +17,6 @@ const SelectSql = [
 	pData + dSelect + "01-5_all_matchs_over.sql",
 	pData + dSelect + "01-6_player_currently_playing.sql",
 	pData + dSelect + "01-7_who_win.sql",
-
 ]
 
 
@@ -90,8 +89,19 @@ export class MatchRepository {
 	}
 
 	public async isPlayerCurrently(id: number) : Promise<boolean> {
-		const res : Match[] = await this.db.getSecur(SelectSql[6], id, id);
+		const res : Match | undefined = await this.db.getSecur(SelectSql[6], id, id);
 		return (res != undefined);
+	}
+	public async isPlayersCurrently(ids: number[]) : Promise<number[] | undefined> {
+		// crée une paire de ids genre [ [0,0] [1,1] [2,2] ...]
+		const allPersonneWhoPlayMaybe : Match[] | undefined = await this.db.prepareSecur(SelectSql[6], ids.map(id => [id, id]), "Get");
+		if (allPersonneWhoPlayMaybe == undefined) return undefined;
+		const idAllPersonneWhoPlay : number[] = [];
+		for (const PersonneWhoPlayMaybe of allPersonneWhoPlayMaybe) {
+			if (PersonneWhoPlayMaybe != undefined)
+				idAllPersonneWhoPlay.push(PersonneWhoPlayMaybe.id);
+		}
+		return (idAllPersonneWhoPlay);
 	}
 
 	public async getWinner(id: number) : Promise<number | undefined>{
