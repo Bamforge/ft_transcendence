@@ -13,6 +13,22 @@ import { getMaxRounds } from "../utils/math.js";
 import { TournamentElimination } from "../interfaces/tabsDb/tournament.js";
 import { mapAddUserResultToBaseResult, mapAddMatchResultToBaseResult, mapAddTournamentEliminationResultToBaseResult, mapGenericAddResultToBaseResult, mapUpdateMatchStatusToBaseResult, mapUpdateTEMatchResultToBaseResult, mapUpdateTEPlayerResultToBaseResult } from "../utils/convertisseur.js";
 
+/**
+ * Les differente tableaux de la db
+ */
+export type tabsDBName = "User" | "Match" | "TE" | "TEPlayer" | "TEMatch";
+
+/**
+ * Les nom des tableaux avec les clés primaire et plus tard les autre moyenn possible daccede à une ligne
+ */
+export type pmTabsDB =
+	| {name : "User" , pm : {id : number}}
+	| {name : "Match" , pm : {id : number}}
+	| {name : "TE" , pm : {id : number}}
+	| {name : "TEPlayer" , pm : {idTE : number, idUser: number }}
+	| {name : "TEMatch" , pm : {idTE : number, order: number }}
+
+
 //////////////////////////////////////////////
 //          TYPE RETURN METHOD              //
 //////////////////////////////////////////////
@@ -33,6 +49,7 @@ export type ErrorCode =
 	| "username_exists"
 	| "no_winner_yet"
 	| "conflict"
+	| "empty"
 	| "unexpected_error";
 
 //////////////////////////////////////////////
@@ -394,9 +411,102 @@ private async validateAndExtractUserIds(
 		return mapUpdateTEPlayerResultToBaseResult(resUpdateRound);
 	}
 
-	// Recupere le nombre de ligne pour chaque tableaux
+/**
+ * Returns the number of rows for each database table.
+ * @param tab - Name of the table
+ * @returns Total number of rows or an error result
+ */
+	public async getNbrOfLigne(tab : tabsDBName): Promise<BaseResult<number>> {
+		let res : number | undefined;
+		switch (tab) {
+			case "User":
+				res = await this._userTab.getNbrOfUsers();
+				if (res != undefined) return ({status: "success", data : res});
+				break;
+			case "Match":
+				res = await this._matchTab.getNbrOfMatch();
+				if (res != undefined) return ({status: "success", data : res});
+				break;
+			case "TE":
+				res = await this._teTab.getNbrOfTE();
+				if (res != undefined) return ({status: "success", data : res});
+				break;
+			case "TEPlayer":
+				res = await this._tePlayerTab.getNbrOfTEPlayers();
+				if (res != undefined) return ({status: "success", data : res});
+				break;
+			case "TEMatch":
+				res = await this._teMatchTab.getNbrOfTEMatch();
+				if (res != undefined) return ({status: "success", data : res});
+				break;
+		}
+		return { status: "error", error: "unexpected_error" };
+	}
 
-	// Recuperer x ligne combientieme fois y exemple je recupere 10 ligne à partir de de la 3 iem repitiontion donc va donne la ligne 30 à 40 du tablaux choisi
+/**
+ * Returns a specific slice of rows from a table.
+ * Example: To retrieve 10 rows starting from the 3rd group (30 to 40), call with (10, 3)
+ * @param tab - Table name
+ * @param nbrOfLigne - Number of rows to retrieve
+ * @param begin - Starting group index (e.g. 3 means starting from row 30)
+ * @returns Slice of rows or an error
+ */
+	public async getSlice(tab : tabsDBName, nbrOfLigne : number, begin: number): Promise<BaseResult<any[]>> {
+		let res :any[];
+		switch (tab) {
+			case "User":
+				res = await this._userTab.getUsersSlice(nbrOfLigne, begin);
+				if (res != undefined) return ({status: "success", data : res});
+				break;
+			case "Match":
+				res = await this._matchTab.getMatchsSlice(nbrOfLigne, begin);
+				if (res != undefined) return ({status: "success", data : res});
+				break;
+			case "TE":
+				res = await this._teTab.getTEsSlice(nbrOfLigne, begin);
+				if (res != undefined) return ({status: "success", data : res});
+				break;
+			case "TEPlayer":
+				res = await this._tePlayerTab.getTEPlayersSlice(nbrOfLigne, begin);
+				if (res != undefined) return ({status: "success", data : res});
+				break;
+			case "TEMatch":
+				res = await this._teMatchTab.getTEMatchsSlice(nbrOfLigne, begin);
+				if (res != undefined) return ({status: "success", data : res});
+				break;
+		}
+		return { status: "error", error: "empty" };
+	}
 
-	// recupere un element preci individuelle de chaque tableaux
+/**
+ * Retrieves a single record from the specified table based on parameters.
+ * @param tabPm - Object containing the table name and parameters
+ * @returns The requested record or an error
+ */
+	public async get(tabPm : pmTabsDB): Promise<BaseResult<any>> {
+		let res : any;
+		switch (tabPm.name) {
+			case "User":
+				res = await this._userTab.getUserById(tabPm.pm.id);
+				if (res != undefined) return ({status: "success", data : res});
+				break;
+			case "Match":
+				res = await this._matchTab.getMatchById(tabPm.pm.id);
+				if (res != undefined) return ({status: "success", data : res});
+				break;
+			case "TE":
+				res = await this._teTab.getTEByid(tabPm.pm.id);
+				if (res != undefined) return ({status: "success", data : res});
+				break;
+			case "TEPlayer":
+				res = await this._tePlayerTab.getTEPlayerByTEidAndUserid(tabPm.pm.idTE, tabPm.pm.idUser);
+				if (res != undefined) return ({status: "success", data : res});
+				break;
+			case "TEMatch":
+				res = await this._teMatchTab.getTEMatchByTEidAndOrder(tabPm.pm.idTE, tabPm.pm.order);
+				if (res != undefined) return ({status: "success", data : res});
+				break;
+		}
+		return { status: "error", error: "not_found" };
+	}
 }

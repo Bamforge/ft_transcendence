@@ -1,6 +1,6 @@
 import chalk from "chalk";
 import { DbGestion } from "../db/dbGestion.js";
-import { BaseResult, TransandanceRepository } from "../repositories/transandance.repository.js";
+import { BaseResult, tabsDBName, TransandanceRepository } from "../repositories/transandance.repository.js";
 import { AddUser } from "../interfaces/tabsDb/users.js";
 
 function showRes(msg: string, res :BaseResult): boolean {
@@ -10,6 +10,16 @@ function showRes(msg: string, res :BaseResult): boolean {
 		return true;
 	}
 	console.log(msg, res.status);
+	return (false);
+}
+
+function showData(msg: string, res :BaseResult): boolean {
+	if (res.status == "error")
+	{
+		console.log(msg, res.error);
+		return true;
+	}
+	console.log(msg, res.data);
 	return (false);
 }
 
@@ -75,6 +85,28 @@ export default async function test_transandance(db: DbGestion)
 		if (showRes(("FIN du Te Match idMatch(" + nbrMatch2 + ") : "), resEndTEMatch)) return ;
 		nbrMatch2--;
 
+		console.log(chalk.magentaBright("\n-----------------"));
+		console.log(chalk.cyanBright("TEST - Méthodes de lecture"));
+		console.log(chalk.magentaBright("-----------------\n"));
+
+		const tables: tabsDBName[] = ["User", "Match", "TE", "TEPlayer", "TEMatch"];
+
+		for (const tab of tables) {
+			const resNbr = await t.getNbrOfLigne(tab);
+			if (showData(`Nombre de lignes dans ${tab}`, resNbr)) return;
+
+			const resSlice = await t.getSlice(tab, 2, 1); // récupère les 10 premières lignes
+			if (showData(`Slice dans ${tab}`, resSlice)) return;
+
+			// Test du get (uniquement pour 1 ou 2 tables, sinon il faut plus d’infos que juste id = 1)
+			if (tab === "User") {
+				const resGet = await t.get({ name: "User", pm: { id: 1 } });
+				if (showData(`Get User id=1`, resGet)) return;
+			} else if (tab === "TEMatch") {
+				const resGet = await t.get({ name: "TEMatch", pm: { idTE: 1, order: 1 } });
+				if (showData(`Get TEMatch idTE=1, order=1`, resGet)) return;
+			}
+		}
 	} catch (err) {
 		console.error(chalk.red(`Erreur Transandance.`));
 	}

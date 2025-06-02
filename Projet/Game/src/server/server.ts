@@ -78,7 +78,8 @@ const startServer = async () => {
 	try {
 		await db.init();
 
-		await test_transandance(db);
+		//decomenter pour testé
+		// await test_transandance(db);
 	
 		const address = await fastify.listen({ port: Number(PORT) });
 		console.log(`Server listening at ${address}`);

@@ -10,6 +10,11 @@ import { addTEPlayer, isSameTEPlayer, TEPlayer } from "../../interfaces/tabsDb/t
 const pData = "./../../../data/sql/"
 
 // Variables I recommend storing in environment variables for later use.
+const dCount = "count/"
+const CountSql = [
+	pData + dCount + "03-0_nbr_of_TEPlayer.sql",
+]
+
 
 const dInsert = "insert/"
 const InsertSql = [
@@ -22,6 +27,7 @@ const SelectSql = [
 	pData + dSelect +"03-1_TEPlayer_by_TE_id_AND_id_in_TE.sql",
 	pData + dSelect +"03-2_all_TEPlayers_eliminated.sql",
 	pData + dSelect +"03-3_all_TEPlayers_by_TEid.sql",
+	pData + dSelect +"03-4_select_rows_with_offset.sql",
 ]
 
 
@@ -170,6 +176,26 @@ export class TEPlayerRepository {
 		return res;
 	}
 
+	/**
+	 * Get a number of TEPlayer from a begin.
+	 * @param nbrOfLigne number of TEPlayer you want
+	 * @param begin where is the begining
+	 * @returns array of TEPlayer
+	 */
+	public async getTEPlayersSlice(nbrOfLigne : number, begin: number) : Promise<TEPlayer []>{
+		const res = await this.db.allSecur(SelectSql[4], nbrOfLigne, begin);
+		return (res)
+	}
+
+	/**
+	 * Returns the total number of TEPlayers in the table.
+	 * @returns The number of TEPlayers.
+	 */
+	public async getNbrOfTEPlayers(): Promise<number | undefined>
+	{
+		const res : number | undefined = await this.db.getSecur(CountSql[0]);
+		return (res);
+	}
 	/////////////////////////// UPDATE
 
 	private handleUpdateResult(res: ISqlite.RunResult<sqlite3.Statement> | undefined, onZeroChange: UpdateTEPlayerResult)

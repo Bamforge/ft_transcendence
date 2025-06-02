@@ -1,0 +1,1 @@
+SELECT COUNT (*) FROM tournament_elimination_matchs;

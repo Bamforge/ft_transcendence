@@ -10,6 +10,11 @@ import { addMatch, isSameMatch, Match } from "../../interfaces/tabsDb/match.js";
 const pData = "./../../../data/sql/"
 
 // Variables I recommend storing in environment variables for later use.
+const dCount = "count/"
+const CountSql = [
+	pData + dCount + "01-0_nbr_of_match.sql",
+]
+
 
 const dSelect = "select/"
 const SelectSql = [
@@ -21,6 +26,7 @@ const SelectSql = [
 	pData + dSelect + "01-5_all_matchs_over.sql",
 	pData + dSelect + "01-6_player_currently_playing.sql",
 	pData + dSelect + "01-7_who_win.sql",
+	pData + dSelect + "01-8_select_rows_with_offset.sql"
 ]
 
 //////////////////////////////////////////////
@@ -175,6 +181,27 @@ export class MatchRepository {
 		if (res == undefined)
 			return (res)
 		return (res.winner_id);
+	}
+
+	/**
+	 * Get a number of match from a begin.
+	 * @param nbrOfLigne number of match you want
+	 * @param begin where is the begining
+	 * @returns array of match
+	 */
+	public async getMatchsSlice(nbrOfLigne : number, begin: number) : Promise<Match []>{
+		const res = await this.db.allSecur(SelectSql[8], nbrOfLigne, begin);
+		return (res)
+	}
+
+	/**
+	 * Returns the total number of Matchs in the table.
+	 * @returns The number of Matchs.
+	 */
+	public async getNbrOfMatch(): Promise<number | undefined>
+	{
+		const res : number | undefined = await this.db.getSecur(CountSql[0]);
+		return (res);
 	}
 
 /**

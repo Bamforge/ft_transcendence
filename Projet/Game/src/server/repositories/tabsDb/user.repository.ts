@@ -7,6 +7,11 @@ const pData = "./../../../data/sql/"
 
 // Variables I recommend storing in environment variables for later use.
 
+const dCount = "count/"
+const CountSql = [
+	pData + dCount + "00-0_nbr_of_user.sql",
+]
+
 const dSelect = "select/"
 const SelectSql = [
 	pData + dSelect + "00-0_users_by_username.sql",
@@ -14,7 +19,8 @@ const SelectSql = [
 	pData + dSelect + "00-2_user_by_id.sql",
 	pData + dSelect + "00-3_all_users.sql",
 	pData + dSelect + "00-4_all_id_users.sql",
-	pData + dSelect + "00-5_1_by_id.sql"
+	pData + dSelect + "00-5_1_by_id.sql",
+	pData + dSelect + "00-6_select_rows_with_offset.sql"
 ]
 
 const dInsert = "insert/"
@@ -122,6 +128,26 @@ export class UserRepository {
 		return (true);
 	}
 
+	/**
+	 * Get a number of User from a begin.
+	 * @param nbrOfLigne number of User you want
+	 * @param begin where is the begining
+	 * @returns array of User
+	 */
+	public async getUsersSlice(nbrOfLigne : number, begin: number) : Promise<User []>{
+		const res = await this.db.allSecur(SelectSql[6], nbrOfLigne, begin);
+		return (res)
+	}
+
+	/**
+	 * Returns the total number of Users in the table.
+	 * @returns The number of Users.
+	 */
+	public async getNbrOfUsers(): Promise<number | undefined>
+	{
+		const res : number | undefined = await this.db.getSecur(CountSql[0]);
+		return (res);
+	}
 	/**
 	 * Adds a new user to the database.
 	 * 

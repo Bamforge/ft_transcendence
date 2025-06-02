@@ -7,6 +7,11 @@ const pData = "./../../../data/sql/"
 
 // Variables I recommend storing in environment variables for later use.
 
+const dCount = "count/"
+const CountSql = [
+	pData + dCount + "02-0_nbr_of_TE.sql",
+]
+
 const dSelect = "select/"
 const SelectSql = [
 	pData + dSelect +"02-0_tournament_by_id.sql",
@@ -17,6 +22,7 @@ const SelectSql = [
 	pData + dSelect +"02-5_all_tournaments_that_has_ended_has_a_date.sql",
 	pData + dSelect +"02-6_all_tournaments_in_progress.sql",
 	pData + dSelect +"02-7_all_tournaments_over.sql",
+	pData + dSelect +"02-8_select_rows_with_offset.sql",
 ]
 
 const dInsert = "insert/"
@@ -104,6 +110,26 @@ export class TournamentEliminationRepository {
 		return (res);
 	}
 
+	/**
+	 * Get a number of TournamentElimination from a begin.
+	 * @param nbrOfLigne number of TournamentElimination you want
+	 * @param begin where is the begining
+	 * @returns array of TournamentElimination
+	 */
+	public async getTEsSlice(nbrOfLigne : number, begin: number) : Promise<TournamentElimination []>{
+		const res = await this.db.allSecur(SelectSql[8], nbrOfLigne, begin);
+		return (res)
+	}
+
+	/**
+	 * Returns the total number of TournamentElimination in the table.
+	 * @returns The number of TournamentElimination.
+	 */
+	public async getNbrOfTE(): Promise<number | undefined>
+	{
+		const res : number | undefined = await this.db.getSecur(CountSql[0]);
+		return (res);
+	}
 /////////////////////////// INSERT
 
 	public async addTE(newTE: addTournamentElimination): Promise<AddTournamentEliminationResult> {

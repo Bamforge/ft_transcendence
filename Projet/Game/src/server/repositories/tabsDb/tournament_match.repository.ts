@@ -12,6 +12,10 @@ import handleUpdateResult from "../../utils/handleUpdateResult.js";
 const pData = "./../../../data/sql/"
 
 // Variables I recommend storing in environment variables for later use.
+const dCount = "count/"
+const CountSql = [
+	pData + dCount + "04-0_nbr_of_TEMatch.sql"
+]
 
 const dInsert = "insert/"
 const InsertSql = [
@@ -26,6 +30,8 @@ const SelectSql = [
 	pData + dSelect +"04-3_all_TEMatchs_by_TEid.sql",
 	pData + dSelect +"04-4_exist_TEMatchs_by_TEid_AND_order.sql",
 	pData + dSelect +"04-5_exist_TEMatchs_by_TEid.sql",
+	pData + dSelect +"04-6_select_rows_with_offset.sql",
+	pData + dSelect +"04-6_select_rows_with_offset.sql",
 ]
 
 const dUpdate = "updates/"
@@ -173,6 +179,26 @@ export class TEMatchRepository {
 		return (res != undefined);
 	}
 
+	/**
+	 * Get a number of TEMatch from a begin.
+	 * @param nbrOfLigne number of TEMatch you want
+	 * @param begin where is the begining
+	 * @returns array of TEMatch
+	 */
+	public async getTEMatchsSlice(nbrOfLigne : number, begin: number) : Promise<TEMatch []>{
+		const res = await this.db.allSecur(SelectSql[6], nbrOfLigne, begin);
+		return (res)
+	}
+
+	/**
+	 * Returns the total number of TEMatchs in the table.
+	 * @returns The number of TEMatchs.
+	 */
+	public async getNbrOfTEMatch(): Promise<number | undefined>
+	{
+		const res : number | undefined = await this.db.getSecur(CountSql[0]);
+		return (res);
+	}
 	/////////////////////////// UPDATE
 
 	/**
