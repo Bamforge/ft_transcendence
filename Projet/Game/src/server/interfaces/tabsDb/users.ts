@@ -1,4 +1,4 @@
-export interface addUser
+export interface AddUser
 {
 	username : string;
 	password ?: string;

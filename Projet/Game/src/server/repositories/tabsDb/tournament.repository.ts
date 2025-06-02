@@ -33,7 +33,7 @@ const UpdateSql = [
 
 export type AddTournamentEliminationResult =
 	| { status: "success", data: ISqlite.RunResult<sqlite3.Statement> }
-	| { status: "invalide_param" }
+	| { status: "invalid_param" }
 	| { status: "error" };
 
 export type UpdateTournamentEliminationResult =
@@ -108,7 +108,7 @@ export class TournamentEliminationRepository {
 
 	public async addTE(newTE: addTournamentElimination): Promise<AddTournamentEliminationResult> {
 		if (newTE.nbr_participant <= 1)
-			return ({status:"invalide_param"});
+			return ({status:"invalid_param"});
 		const nbr_round: number = Math.ceil(Math.log2(newTE.nbr_participant))+1;
 		const res = await this.db.runSecur(InsertSql[0], newTE.nbr_participant, nbr_round);
 		return (res == undefined ? { status: "error" } : {status: "success", data: res});
@@ -146,14 +146,16 @@ export class TournamentEliminationRepository {
 		return (res == undefined ? {status:"error"} : {status: "success", data : res});
 	}
 
-	public async updateEndAndWiner(controlTE: TournamentElimination, newTE : TournamentElimination) : Promise<UpdateTournamentEliminationResult> {
+	public async updateEndAndWiner(controlTE: TournamentElimination, winner : {userId ?: number, name ?: string}) : Promise<UpdateTournamentEliminationResult> {
 		const {
-			winner_pseudo = "",
-			winner_id = "NULL",
-		} = newTE;
+			name = "",
+			userId = "NULL",
+		} = winner;
 		const verifTE : GetTournamentEliminationResult = await this.getTEByid(controlTE.id)
 		if (verifTE.status == "error")
 			return ({status: 'not_found'});
+		else if (name == "" && userId == "NULL")
+				return ({status: "error"});
 		else if (false == isSameTournamentElimination(verifTE.data, controlTE))
 		{
 			console.log(GetTournamentEliminationDataString(verifTE.data));
@@ -163,7 +165,7 @@ export class TournamentEliminationRepository {
 			return ({status: "already_ended"});
 		else if (controlTE.winner_pseudo != undefined && controlTE.winner_pseudo != "")
 			return ({status: "already_win"});
-		const res = await this.db.runSecur(UpdateSql[2], winner_pseudo, winner_id, controlTE.id);
+		const res = await this.db.runSecur(UpdateSql[2], name, userId, controlTE.id);
 		return (res == undefined ? {status:"error"} : {status: "success", data : res});
 	}
 }

@@ -29,9 +29,7 @@ export default async function test_tab_TE(db: DbGestion)
 			return ;
 		console.log(GetTournamentEliminationDataString(resSelectById.data));
 
-		const putWinner = {... resSelectById.data};
-		putWinner.winner_pseudo = "YASSSSINE";
-		const resEnd = await tabTEGestion.updateEndAndWiner(resSelectById.data, putWinner);
+		const resEnd = await tabTEGestion.updateEndAndWiner(resSelectById.data, {name: "YASSSINE"});
 		console.log("resEnd status : " + (resEnd.status == "success" ? chalk.green(resEnd.status) : chalk.yellow(resEnd.status)));
 		
 		console.log(GetTournamentsEliminationDataString(await tabTEGestion.getAllTEs()));

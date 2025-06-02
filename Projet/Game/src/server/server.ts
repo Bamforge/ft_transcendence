@@ -74,10 +74,6 @@ const PORT = process.env.PORT || 3000;
  */
 const db = new DbGestion();
 
-
-// netoyer le code
-// re verifier transandance class quoi
-
 const startServer = async () => {
 	try {
 		await db.init();

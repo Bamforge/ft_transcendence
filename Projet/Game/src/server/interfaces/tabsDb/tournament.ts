@@ -86,7 +86,6 @@ export function isSameTournamentElimination(tournament1 : TournamentElimination 
 		return false;
 	}
 
-	console.log("✅ Les deux tournois sont identiques");
 	return true;
 }
 

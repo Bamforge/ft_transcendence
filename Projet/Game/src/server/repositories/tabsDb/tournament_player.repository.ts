@@ -3,6 +3,10 @@ import sqlite3 from 'sqlite3';
 import { ISqlite } from 'sqlite';
 import { addTEPlayer, isSameTEPlayer, TEPlayer } from "../../interfaces/tabsDb/tournament_player.js";
 
+//////////////////////////////////////////////
+//            Script SQL path               //
+//////////////////////////////////////////////
+
 const pData = "./../../../data/sql/"
 
 // Variables I recommend storing in environment variables for later use.
@@ -28,6 +32,10 @@ const UpdateSql = [
 	pData + dUpdate + "03-2_winer.sql",
 ]
 
+//////////////////////////////////////////////
+//          TYPE RETURN METHOD              //
+//////////////////////////////////////////////
+
 export type AddTEPlayerResult =
 	| { status: "allSuccess", data: ISqlite.RunResult<sqlite3.Statement>[]}
 	| { status: "success", data: ISqlite.RunResult<sqlite3.Statement>}
@@ -49,6 +57,13 @@ export type GetTEPlayerResult =
 	| { status: "success"; data: TEPlayer }
 	| { status: "error" };
 
+//////////////////////////////////////////////
+//                  CLASS                   //
+//////////////////////////////////////////////
+
+/**
+ * The class that manages the "tournament_elimination_players" array of the database
+ */
 export class TEPlayerRepository {
 	constructor(private db: DbGestion) {}
 

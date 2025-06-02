@@ -1,11 +1,11 @@
 import { TournamentElimination } from "../interfaces/tabsDb/tournament";
-import { addUser, User } from "../interfaces/tabsDb/users";
+import { AddUser, User } from "../interfaces/tabsDb/users";
 
 export function isUser(obj: any): obj is User {
 	return typeof obj === 'object' && 'id' in obj && 'username' in obj;
 }
 
-export function isAddUser(obj: any): obj is addUser {
+export function isAddUser(obj: any): obj is AddUser {
 	return typeof obj === 'object' && 'username' in obj && !('id' in obj);
 }
 
